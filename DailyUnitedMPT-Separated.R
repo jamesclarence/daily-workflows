@@ -1,6 +1,5 @@
 #Call temporary files and name it UMPT#
 setwd("Y:/API/")
-#UMPT<-read.csv(paste("Y:/API/", "unified-", Sys.Date(), ".csv", sep=""))
 Lourdes<-read.csv(paste("Y:/API/", "lourdes-", Sys.Date(), ".csv", sep=""))
 Amb<-read.csv(paste("Y:/API/", "cooper-ambulatory-", Sys.Date(), ".csv", sep=""))
 Fam<-read.csv(paste("Y:/API/", "cooper-family-med-", Sys.Date(), ".csv", sep=""))
@@ -37,9 +36,6 @@ UMPT<-rbind(UMPT,uhi)
 
 #Remove "U" from string to match TrackVia subscriber id's#
 UMPT$Subscriber.ID<-gsub("U", "", UMPT$Subscriber.ID)
-
-#Subsets records where Subscriber.ID is not blank#
-#UMPT<-subset(UMPT, is.na(Subscriber.ID)==FALSE)
 
 #Create variables to calculate difference in days between today and admit date#
 UMPT$TodaysDate <- Sys.Date()
