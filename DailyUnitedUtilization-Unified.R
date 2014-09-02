@@ -1,4 +1,4 @@
-#Call temporary files and name it UMPT#
+#Call temporary file and name it UMPT#
 setwd("Y:/API/")
 UMPT<-read.csv(paste("Y:/API/", "unified-", Sys.Date(), ".csv", sep=""))
 UMPT$Subscriber.ID<-as.character(UMPT$Subscriber.ID)
