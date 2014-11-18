@@ -79,9 +79,21 @@ CMITriage3<-reshape::rename(CMITriage3, c(FirstName="First Name"))
 
 
 #Identifies the columns for the two lists to be exported#
-TriageReview<-CMITriage3[,c("PatientID2", "AgeTriage","Admit Date", "Discharge Date", "Facility", "CurrentlyAdmitted", "TotalDays6months", "Inp6mo", "ED6mo", "HIEProvider", "HIEInsurance")]
+TriageReview<-CMITriage3[,c("PatientID2", 
+                            "AgeTriage",
+                            "Admit Date", 
+                            "Discharge Date", 
+                            "Facility", 
+                            "CurrentlyAdmitted", 
+                            "TotalDays6months", 
+                            "Inp6mo", 
+                            "ED6mo", 
+                            "HIEProvider", 
+                            "HIEInsurance",
+                            "HIEID")]
 
 #Renames PatientID2 to PatientID for the Traige Review File#
 TriageReview<-reshape::rename(TriageReview, c(PatientID2="PatientID"))
 
-write.csv(TriageReview, file="TriageReview.csv", row.names=FALSE)
+#Expors file
+write.csv(TriageReview, (file=paste("TriageReview", format(Sys.Date(), "-%Y-%m-%d"), ".csv", sep="")), row.names=FALSE)
