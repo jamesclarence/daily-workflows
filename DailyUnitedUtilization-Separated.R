@@ -18,6 +18,7 @@ UMPT <- rbind(Lourdes,Amb,Fam,Phys,AR,fairview,phope,reliance,luke)
 UMPT$Practice<-NULL
 UMPT$PCP.Name<-NULL
 uhi$Patient.ID<-NULL
+UMPT$Patient.ID<-NULL
 
 #Adds  text identifiers to Subscriber_ID (NIC and U)#
 uhi$nic<-"NIC"
@@ -64,6 +65,9 @@ UMPT2<-reshape::rename(UMPT2, c(Subscriber.ID="SUBSCRIBER_ID_LINK"))
 
 #Identifies the columns for the file to be exported#
 UMPT2<-UMPT2[,c("SUBSCRIBER_ID_LINK","AdmitDate","DischargeDate", "Facility", "PatientClass", "HistoricalDiagnosis", "Inp6mo", "ED6mo", "CurrentlyAdmitted")]
+
+#Replaces NICNIC with NIC if it exists in any of the Subscriber IDs
+UMPT2$SUBSCRIBER_ID_LINK<-gsub("NICNIC", "NIC", UMPT2$SUBSCRIBER_ID_LINK)
 
 #Export csv file#
 write.csv(UMPT2, (file=paste("DailyUnitedUtilization", format(Sys.Date(), "-%Y-%m-%d"), ".csv", sep="")), row.names=FALSE)
