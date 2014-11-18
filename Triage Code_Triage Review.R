@@ -89,8 +89,7 @@ TriageReview<-CMITriage3[,c("PatientID2",
                             "Inp6mo", 
                             "ED6mo", 
                             "HIEProvider", 
-                            "HIEInsurance",
-                            "HIEID")]
+                            "HIEInsurance")]
 
 #Renames PatientID2 to PatientID for the Traige Review File#
 TriageReview<-reshape::rename(TriageReview, c(PatientID2="PatientID"))
