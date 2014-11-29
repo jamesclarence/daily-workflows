@@ -17,7 +17,6 @@ UMPT <- rbind(Lourdes,Amb,Fam,Phys,AR,fairview,phope,reliance,luke)
 #Deletes unused fields#
 UMPT$Practice<-NULL
 UMPT$PCP.Name<-NULL
-uhi$Patient.ID<-NULL
 
 #Adds  text identifiers to Subscriber_ID (NIC and U)#
 uhi$nic<-"NIC"
@@ -53,7 +52,7 @@ UMPT2$DischargeDate <- gsub("\\(.*\\)","\\1", UMPT2$DischargeDate)
 #Remove dates from CurrentlyAdmitted field#
 UMPT2$CurrentlyAdmitted <- ifelse(UMPT2$CurrentlyAdmitted == UMPT2$DischargeDate, "", UMPT2$CurrentlyAdmitted)
 
-#renames Patient.ID to HIE_ID#
+#renames fields#
 require(reshape)
 UMPT2<-reshape::rename(UMPT2, c(Admit.Date="AdmitDate"))
 UMPT2<-reshape::rename(UMPT2, c(Adm.Diagnoses="HistoricalDiagnosis"))
@@ -61,9 +60,13 @@ UMPT2<-reshape::rename(UMPT2, c(Inp..6mo.="Inp6mo"))
 UMPT2<-reshape::rename(UMPT2, c(ED..6mo.="ED6mo"))
 UMPT2<-reshape::rename(UMPT2, c(Patient.Class="PatientClass"))
 UMPT2<-reshape::rename(UMPT2, c(Subscriber.ID="SUBSCRIBER_ID"))
+UMPT2<-reshape::rename(UMPT2, c(Patient.ID="HIEID"))
 
 #Identifies the columns for the file to be exported#
-UMPT2<-UMPT2[,c("SUBSCRIBER_ID", "AdmitDate")]
+UMPT2<-UMPT2[,c("SUBSCRIBER_ID", "AdmitDate","HIEID")]
+
+#Replaces NICNIC with NIC if it exists in any of the Subscriber IDs
+UMPT2$SUBSCRIBER_ID<-gsub("NICNIC", "NIC", UMPT2$SUBSCRIBER_ID)
 
 #Export csv file#
 write.csv(UMPT2, (file=paste ("DailyUnitedMPT", format(Sys.Date(), "-%Y-%m-%d"), ".csv", sep="")), row.names=FALSE)
