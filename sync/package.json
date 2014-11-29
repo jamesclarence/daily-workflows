@@ -1,0 +1,11 @@
+{
+  "name": "cchp-sync",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "dhcole",
+  "license": "none",
+  "dependencies": {
+    "trackvia": "dhcole/node-trackvia"
+  }
+}
