@@ -1,18 +1,27 @@
+# Packages
+require(reshape)
+require("jsonlite")
+
+# Load data from stdin
+data <- fromJSON(readLines(file("stdin")))
+UMPT <- read.csv(text=data[1], row.names=NULL);
+uhi <- read.csv(text=data[2], row.names=NULL);
+
 #Call temporary files and name it UMPT#
-setwd("Y:/API/")
-Lourdes<-read.csv(paste("Y:/API/", "lourdes-", Sys.Date(), ".csv", sep=""))
-Amb<-read.csv(paste("Y:/API/", "cooper-ambulatory-", Sys.Date(), ".csv", sep=""))
-Fam<-read.csv(paste("Y:/API/", "cooper-family-med-", Sys.Date(), ".csv", sep=""))
-Phys<-read.csv(paste("Y:/API/", "cooper-physicians-", Sys.Date(), ".csv", sep=""))
-AR<-read.csv(paste("Y:/API/", "acosta-ramon-", Sys.Date(), ".csv", sep=""))
-fairview<-read.csv(paste("Y:/API/", "fairview-", Sys.Date(), ".csv", sep=""))
-phope<-read.csv(paste("Y:/API/", "project-hope-", Sys.Date(), ".csv", sep=""))
-reliance<-read.csv(paste("Y:/API/", "reliance-", Sys.Date(), ".csv", sep=""))
-luke<-read.csv(paste("Y:/API/", "st-luke-", Sys.Date(), ".csv", sep=""))
-uhi<-read.csv(paste("Y:/API/", "uhi-", Sys.Date(), ".csv", sep=""))
+# setwd("Y:/API/")
+# Lourdes<-read.csv(paste("Y:/API/", "lourdes-", Sys.Date(), ".csv", sep=""))
+# Amb<-read.csv(paste("Y:/API/", "cooper-ambulatory-", Sys.Date(), ".csv", sep=""))
+# Fam<-read.csv(paste("Y:/API/", "cooper-family-med-", Sys.Date(), ".csv", sep=""))
+# Phys<-read.csv(paste("Y:/API/", "cooper-physicians-", Sys.Date(), ".csv", sep=""))
+# AR<-read.csv(paste("Y:/API/", "acosta-ramon-", Sys.Date(), ".csv", sep=""))
+# fairview<-read.csv(paste("Y:/API/", "fairview-", Sys.Date(), ".csv", sep=""))
+# phope<-read.csv(paste("Y:/API/", "project-hope-", Sys.Date(), ".csv", sep=""))
+# reliance<-read.csv(paste("Y:/API/", "reliance-", Sys.Date(), ".csv", sep=""))
+# luke<-read.csv(paste("Y:/API/", "st-luke-", Sys.Date(), ".csv", sep=""))
+# uhi<-read.csv(paste("Y:/API/", "uhi-", Sys.Date(), ".csv", sep=""))
 
 #Binds practice data into one united file#
-UMPT <- rbind(Lourdes,Amb,Fam,Phys,AR,fairview,phope,reliance,luke)
+# UMPT <- rbind(Lourdes,Amb,Fam,Phys,AR,fairview,phope,reliance,luke)
 
 #Deletes unused fields#
 UMPT$Practice<-NULL
@@ -55,7 +64,6 @@ UMPT2$DischargeDate <- gsub("\\(.*\\)","\\1", UMPT2$DischargeDate)
 UMPT2$CurrentlyAdmitted <- ifelse(UMPT2$CurrentlyAdmitted == UMPT2$DischargeDate, "", UMPT2$CurrentlyAdmitted)
 
 #renames Patient.ID to HIE_ID#
-require(reshape)
 UMPT2<-reshape::rename(UMPT2, c(Admit.Date="AdmitDate"))
 UMPT2<-reshape::rename(UMPT2, c(Adm.Diagnoses="HistoricalDiagnosis"))
 UMPT2<-reshape::rename(UMPT2, c(Inp..6mo.="Inp6mo"))
@@ -70,4 +78,5 @@ UMPT2<-UMPT2[,c("SUBSCRIBER_ID_LINK","AdmitDate","DischargeDate", "Facility", "P
 UMPT2$SUBSCRIBER_ID_LINK<-gsub("NICNIC", "NIC", UMPT2$SUBSCRIBER_ID_LINK)
 
 #Export csv file#
-write.csv(UMPT2, (file=paste("DailyUnitedUtilization", format(Sys.Date(), "-%Y-%m-%d"), ".csv", sep="")), row.names=FALSE)
+# write.csv(UMPT2, (file=paste("DailyUnitedUtilization", format(Sys.Date(), "-%Y-%m-%d"), ".csv", sep="")), row.names=FALSE)
+write.csv(UMPT2, stdout(), row.names=FALSE)

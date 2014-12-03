@@ -1,7 +1,15 @@
+# Packages
+require(reshape)
+require("jsonlite")
+
+# Load data from stdin
+data <- fromJSON(readLines(file("stdin")))
+CMITriage <- read.csv(text=data[1], row.names=NULL);
+
 #Sets working directory, reads file and creates a nickname#
-setwd("Y:/API/")
-CMITriage <- read.csv("Y:/API/Admitted Past Month (High Use).csv", header=TRUE)
-write.csv(CMITriage, (file=paste ("CMI Admitted Past Month (High Use)", Sys.Date(), ".csv", sep="")), row.names=FALSE)
+# setwd("Y:/API/")
+# CMITriage <- read.csv("Y:/API/Admitted Past Month (High Use).csv", header=TRUE)
+# write.csv(CMITriage, (file=paste ("CMI Admitted Past Month (High Use)", Sys.Date(), ".csv", sep="")), row.names=FALSE)
 
 #Splits the "Name" column into First and Last Name#
 CMITriage$LastName = as.character(lapply(strsplit(as.character(CMITriage$Name), split=", "), "[", 1))
@@ -61,7 +69,6 @@ CMITriage3$Facility<-NULL
 CMITriage3$Gender<-NULL
 
 #Renames columns#
-require(reshape)
 CMITriage3<-reshape::rename(CMITriage3, c(Patient.ID="HIEID"))
 CMITriage3<-reshape::rename(CMITriage3, c(DOB="Date of Birth"))
 CMITriage3<-reshape::rename(CMITriage3, c(Admit.Date="Admit Date"))
@@ -95,4 +102,5 @@ TriageReview<-CMITriage3[,c("PatientID2",
 TriageReview<-reshape::rename(TriageReview, c(PatientID2="PatientID"))
 
 #Expors file
-write.csv(TriageReview, (file=paste("TriageReview", format(Sys.Date(), "-%Y-%m-%d"), ".csv", sep="")), row.names=FALSE)
+# write.csv(TriageReview, (file=paste("TriageReview", format(Sys.Date(), "-%Y-%m-%d"), ".csv", sep="")), row.names=FALSE)
+write.csv(TriageReview, stdout(), row.names=FALSE)

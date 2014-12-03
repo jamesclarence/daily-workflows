@@ -1,11 +1,20 @@
+# Packages
+require("jsonlite")
+
+# Load data from stdin
+data <- fromJSON(readLines(file("stdin")))
+unified <- read.csv(text=data[1], row.names=NULL);
+mpt <- read.csv(text=data[2], row.names=NULL);
+
+
 #Sets working directory#
-setwd("Y:/Data Share Daily/CMMI-Readmissions/")
+# setwd("Y:/Data Share Daily/CMMI-Readmissions/")
 
 #Calls in all downloaded files from the HIE#
-unified<-read.csv(paste("Y:/Data Share Daily/CMMI-Readmissions/", "unified-", Sys.Date(), ".csv", sep=""))
+# unified<-read.csv(paste("Y:/Data Share Daily/CMMI-Readmissions/", "unified-", Sys.Date(), ".csv", sep=""))
 
 #Calls the master patient table from TrackVia > CMMI#
-mpt<-read.csv(paste("Y:/Data Share Daily/CMMI-Readmissions/", "mpt-", Sys.Date(), ".csv", sep=""))
+# mpt<-read.csv(paste("Y:/Data Share Daily/CMMI-Readmissions/", "mpt-", Sys.Date(), ".csv", sep=""))
 
 #Builds the UniqueID in the unified report to be able to compare to mpt#
 #Changes capitalized Name fields to title case#
@@ -71,3 +80,4 @@ readmit3$FoundError<-ifelse(try(readmit3$Enrolled=="No" & readmit3$RCTStudyGroup
 
 #Exports file#
 write.csv(readmit3, (file=paste ("CMMI-Readmissions", format(Sys.Date(), "-%Y-%m-%d"), ".csv", sep="")), row.names=FALSE)
+write.csv(readmit3, stdout(), row.names=FALSE)
