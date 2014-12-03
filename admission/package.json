@@ -6,6 +6,9 @@
   "author": "dhcole",
   "license": "none",
   "dependencies": {
-    "trackvia": "dhcole/node-trackvia"
+    "comma-separated-values": "^3.6.1",
+    "queue-async": "^1.0.7",
+    "trackvia": "dhcole/node-trackvia",
+    "underscore": "^1.7.0"
   }
 }

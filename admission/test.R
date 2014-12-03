@@ -1,5 +1,7 @@
-x <- readLines(file("stdin"),1)
-print(x)
+require("jsonlite")
 
-# UMPT<-read.csv('stdin');
+x <- fromJSON(readLines(file("stdin")))
+print(x[2])
+
+# UMPT<-read.csv(text=commandArgs(TRUE)[1]);
 # write.csv(UMPT, stdout(), row.names=FALSE)
