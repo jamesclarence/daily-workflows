@@ -16,7 +16,7 @@ CMITriage$LN<-substr(CMITriage$LastName, 1, 3)
 
 #Prepares the DOB Field to be concatenated for the PatientID2 field#
 CMITriage$DOB2 <- as.POSIXct(CMITriage$DOB, format="%m/%d/%Y")
-CMITriage$DOB2<-as.numeric(CMITriage$DOB2)
+#CMITriage$DOB2<-as.numeric(CMITriage$DOB2)
 CMITriage$DOB3<-format(CMITriage$DOB2, "%m%d%Y")
 
 #Concatenates the 3 fields that form the PatientID field#
