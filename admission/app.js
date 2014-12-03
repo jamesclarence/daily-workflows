@@ -3,6 +3,7 @@ var queue = require('queue-async'),
     tv = require('trackvia')(tvConfig),
     configs = require('./config.json'),
     CSV = require('comma-separated-values'),
+    fs = require('fs'),
     _ = require('underscore');
 
 // Load files
@@ -23,20 +24,51 @@ configs.forEach(function(config) {
   q.awaitAll(combineSources);
 
   function loadSource(source, index, cb) {
-    var spawn = require('child_process').spawn,
-        child = spawn('curl', [
-          '-s', '--ssl-reqd', '-K', 'ftp.config' , source
-        ], { maxBuffer: 200 * 1024 * 1024 }),
-        output = { key: index, items: [] };
+    var output = { key: index, items: [] };
 
-    child.stdout.setEncoding('utf8');
-    child.stderr.setEncoding('utf8');
-    child.stdout.on('data', function (data) { output.items.push(data); });
-    child.stderr.on('data', function (data) { cb(data, null); });
-    child.on('exit', function (code, signal) {
-      output.items = output.items.join('');
-      cb(null, output);
-    });
+    if (typeof source === 'object') {
+      if (source.type.toLowerCase() === 'trackvia') {
+        var page = 1,
+            results = [];
+        getRecords(function(data) {
+          output.items = data;
+          cb(null, output)
+        });
+        function getRecords(cb) {
+          tv.views(source.view, { limit: 100, page: page }, function(err, res) {
+            if (err) throw err;
+            if (res.records && res.records.length) {
+              results = results.concat(res.records);
+              page = page + 1;
+              getRecords(cb);
+            } else {
+              results = _(results).chain()
+                .map(function(item) { return item.fields; })
+                .sortBy(function(item) { return -_(item).size(); })
+                .value();
+              var csv = new CSV(results, { header: true, cast: false }).encode()
+                  .replace(/"undefined"/g, '""')
+                  .replace(/<!--tvia_br--><br><!--tvia_br-->/g, '\n');
+              cb(csv);
+            }
+          });
+        }
+      }
+    } else {
+      var spawn = require('child_process').spawn,
+          child = spawn('curl', [
+            '-s', '--ssl-reqd', '-K', 'ftp.config' , source
+          ], { maxBuffer: 200 * 1024 * 1024 });
+
+      child.stdout.setEncoding('utf8');
+      child.stderr.setEncoding('utf8');
+      child.stdout.on('data', function (data) { output.items.push(data); });
+      child.stderr.on('data', function (data) { cb(data, null); });
+      child.on('exit', function (code, signal) {
+        output.items = output.items.join('');
+        cb(null, output);
+      });
+    }
   }
 
   function combineSources(err, data) {
@@ -74,6 +106,7 @@ configs.forEach(function(config) {
       output.push(data);
     });
     child.stderr.on('data', function(data) {
+      console.log(data);
     });
     child.on('error', function(data) {
       throw data;
@@ -84,7 +117,16 @@ configs.forEach(function(config) {
   }
 
   function sendOutput(data) {
-    var data = new CSV(data, { header: true, cast: false }).parse();
+
+    if (typeof config.output === 'string') {
+      fs.writeFile(config.output, data, function(err) {
+        if (err) throw err;
+        console.log('Saved file: ' + config.output);
+      })
+      return;
+    }
+
+    data = new CSV(data, { header: true, cast: false }).parse();
 
     switch (config.output.operation) {
       case 'add':
