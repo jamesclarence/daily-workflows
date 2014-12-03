@@ -28,7 +28,7 @@ unified$LN<-substr(unified$LastName, 1, 3)
 
 #Prepares the Date.of.Birth Field to be concatenated for the Unique ID field#
 unified$DOB1 <- as.POSIXct(unified$DOB, format="%m/%d/%Y")
-as.numeric(unified$DOB1)
+unified$DOB1<-as.numeric(unified$DOB1)
 unified$DOB2<-format(unified$DOB1, "%m%d%Y")
 
 #Concatenates the 3 fields that form the Unique ID2 field#
