@@ -1,35 +1,24 @@
-options(warn=-1)
-
 # Packages
 suppressMessages(require(reshape))
-suppressMessages(require(jsonlite))
-
-# Load data from stdin
-data <- fromJSON(readLines(file("stdin")))
-UMPT <- read.csv(text=data[1], row.names=NULL);
-uhi <- read.csv(text=data[2], row.names=NULL);
 
 #Call temporary files and name it UMPT#
-# setwd("Y:/API/")
-# Lourdes<-read.csv(paste("Y:/API/", "lourdes-", Sys.Date(), ".csv", sep=""))
-# Amb<-read.csv(paste("Y:/API/", "cooper-ambulatory-", Sys.Date(), ".csv", sep=""))
-# Fam<-read.csv(paste("Y:/API/", "cooper-family-med-", Sys.Date(), ".csv", sep=""))
-# Phys<-read.csv(paste("Y:/API/", "cooper-physicians-", Sys.Date(), ".csv", sep=""))
-# AR<-read.csv(paste("Y:/API/", "acosta-ramon-", Sys.Date(), ".csv", sep=""))
-# fairview<-read.csv(paste("Y:/API/", "fairview-", Sys.Date(), ".csv", sep=""))
-# phope<-read.csv(paste("Y:/API/", "project-hope-", Sys.Date(), ".csv", sep=""))
-# reliance<-read.csv(paste("Y:/API/", "reliance-", Sys.Date(), ".csv", sep=""))
-# luke<-read.csv(paste("Y:/API/", "st-luke-", Sys.Date(), ".csv", sep=""))
-# uhi<-read.csv(paste("Y:/API/", "uhi-", Sys.Date(), ".csv", sep=""))
+Lourdes<-read.csv(paste("tmp/lourdes-", Sys.Date(), ".csv", sep=""))
+Amb<-read.csv(paste("tmp/cooper-ambulatory-", Sys.Date(), ".csv", sep=""))
+Fam<-read.csv(paste("tmp/cooper-family-med-", Sys.Date(), ".csv", sep=""))
+Phys<-read.csv(paste("tmp/cooper-physicians-", Sys.Date(), ".csv", sep=""))
+AR<-read.csv(paste("tmp/acosta-ramon-", Sys.Date(), ".csv", sep=""))
+fairview<-read.csv(paste("tmp/fairview-", Sys.Date(), ".csv", sep=""))
+phope<-read.csv(paste("tmp/project-hope-", Sys.Date(), ".csv", sep=""))
+reliance<-read.csv(paste("tmp/reliance-", Sys.Date(), ".csv", sep=""))
+luke<-read.csv(paste("tmp/st-luke-", Sys.Date(), ".csv", sep=""))
+uhi<-read.csv(paste("tmp/uhi-", Sys.Date(), ".csv", sep=""))
 
 #Binds practice data into one united file#
-# UMPT <- rbind(Lourdes,Amb,Fam,Phys,AR,fairview,phope,reliance,luke)
+UMPT <- rbind(Lourdes,Amb,Fam,Phys,AR,fairview,phope,reliance,luke)
 
 #Deletes unused fields#
 UMPT$Practice<-NULL
 UMPT$PCP.Name<-NULL
-uhi$Patient.ID<-NULL
-UMPT$Patient.ID<-NULL
 
 #Adds  text identifiers to Subscriber_ID (NIC and U)#
 uhi$nic<-"NIC"
@@ -72,13 +61,14 @@ UMPT2<-reshape::rename(UMPT2, c(Inp..6mo.="Inp6mo"))
 UMPT2<-reshape::rename(UMPT2, c(ED..6mo.="ED6mo"))
 UMPT2<-reshape::rename(UMPT2, c(Patient.Class="PatientClass"))
 UMPT2<-reshape::rename(UMPT2, c(Subscriber.ID="SUBSCRIBER_ID_LINK"))
+UMPT2<-reshape::rename(UMPT2, c(Patient.ID="Patient ID HIE"))
 
 #Identifies the columns for the file to be exported#
-UMPT2<-UMPT2[,c("SUBSCRIBER_ID_LINK","AdmitDate","DischargeDate", "Facility", "PatientClass", "HistoricalDiagnosis", "Inp6mo", "ED6mo", "CurrentlyAdmitted")]
+UMPT2<-UMPT2[,c("SUBSCRIBER_ID_LINK","Patient ID HIE","AdmitDate","DischargeDate", "Facility", "PatientClass", "HistoricalDiagnosis", "Inp6mo", "ED6mo", "CurrentlyAdmitted")]
 
 #Replaces NICNIC with NIC if it exists in any of the Subscriber IDs
 UMPT2$SUBSCRIBER_ID_LINK<-gsub("NICNIC", "NIC", UMPT2$SUBSCRIBER_ID_LINK)
 
 #Export csv file#
-# write.csv(UMPT2, (file=paste("DailyUnitedUtilization", format(Sys.Date(), "-%Y-%m-%d"), ".csv", sep="")), row.names=FALSE)
+# write.csv(UMPT2, (file=paste("output/DailyUnitedUtilization", format(Sys.Date(), "-%Y-%m-%d"), ".csv", sep="")), row.names=FALSE)
 write.csv(UMPT2, stdout(), row.names=FALSE)
