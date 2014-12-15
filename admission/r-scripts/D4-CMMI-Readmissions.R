@@ -1,5 +1,8 @@
+options(warn=-1)
+
 # Packages
-require("jsonlite")
+suppressMessages(require(jsonlite))
+suppressMessages(require(data.table))
 
 # Load data from stdin
 data <- fromJSON(readLines(file("stdin")))
@@ -50,7 +53,6 @@ mpt2<-subset(mpt, Enrolled.=="Yes" | RCTStudyGroup=="Control")
 readmit<-unified[unified$UniqueID %in% mpt2$UniqueID,]
 
 #If the individual exists in the MPT, then it adds their RCTSTudyGroup#
-require("data.table")
 readmit<-data.table(readmit, key="UniqueID")
 mpt2<-data.table(mpt2, key="UniqueID")
 readmit2<-mpt2[readmit]

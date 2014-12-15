@@ -1,6 +1,8 @@
+options(warn=-1)
+
 # Packages
-require(reshape)
-require("jsonlite")
+suppressMessages(require(reshape))
+suppressMessages(require(jsonlite))
 
 # Load data from stdin
 data <- fromJSON(readLines(file("stdin")))

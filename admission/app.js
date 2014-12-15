@@ -62,7 +62,9 @@ configs.forEach(function(config) {
 
       child.stdout.setEncoding('utf8');
       child.stderr.setEncoding('utf8');
-      child.stdout.on('data', function (data) { output.items.push(data); });
+      child.stdout.on('data', function (data) {
+        if (output.items && output.items.push) output.items.push(data);
+      });
       child.stderr.on('data', function (data) { cb(data, null); });
       child.on('exit', function (code, signal) {
         output.items = output.items.join('');
