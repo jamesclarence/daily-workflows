@@ -61,16 +61,13 @@ readmit2$BulkImport<-"Import"
 readmit2$Discharge.Date..Day. <- gsub("\\(.*\\)","\\1", readmit2$Discharge.Date..Day.)
 
 #Selects the fields to be exported#
-readmit3<-data.frame(readmit2$UniqueID, readmit2$Patient.ID, readmit2$Admit.Date, readmit2$Discharge.Date..Day., readmit2$Visit.Type, readmit2$Facility, readmit2$BulkImport, readmit2$Enrolled., readmit2$RCTStudyGroup, readmit2$RCTGroup)
+readmit3<-data.frame(readmit2$UniqueID, readmit2$Patient.ID, readmit2$Admit.Date, readmit2$Discharge.Date..Day., readmit2$Visit.Type, readmit2$Facility, readmit2$BulkImport)
 
 #Renames fields to match TrackVia table#
 readmit3<-reshape::rename(readmit3, c(readmit2.Admit.Date="AdmitDate"))
 readmit3<-reshape::rename(readmit3, c(readmit2.Facility="Facility"))
-readmit3<-reshape::rename(readmit3, c(readmit2.RCTGroup="RCTGroup"))
-readmit3<-reshape::rename(readmit3, c(readmit2.RCTStudyGroup="RCTStudyGroup"))
 readmit3<-reshape::rename(readmit3, c(readmit2.UniqueID="UniqueID"))
 readmit3<-reshape::rename(readmit3, c(readmit2.Visit.Type="VisitType"))
-readmit3<-reshape::rename(readmit3, c(readmit2.Enrolled.="Enrolled"))
 readmit3<-reshape::rename(readmit3, c(readmit2.BulkImport="BulkImport"))
 readmit3<-reshape::rename(readmit3, c(readmit2.Discharge.Date..Day.="DischargeDate"))
 readmit3<-reshape::rename(readmit3, c(readmit2.Patient.ID="Patient ID"))
