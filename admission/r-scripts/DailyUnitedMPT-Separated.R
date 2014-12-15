@@ -67,10 +67,10 @@ UMPT2<-reshape::rename(UMPT2, c(Inp..6mo.="Inp6mo"))
 UMPT2<-reshape::rename(UMPT2, c(ED..6mo.="ED6mo"))
 UMPT2<-reshape::rename(UMPT2, c(Patient.Class="PatientClass"))
 UMPT2<-reshape::rename(UMPT2, c(Subscriber.ID="SUBSCRIBER_ID"))
-UMPT2<-reshape::rename(UMPT2, c(Patient.ID="HIEID"))
+UMPT2<-reshape::rename(UMPT2, c(Patient.ID="Patient ID HIE"))
 
 #Identifies the columns for the file to be exported#
-UMPT2<-UMPT2[,c("SUBSCRIBER_ID", "AdmitDate","HIEID")]
+UMPT2<-UMPT2[,c("SUBSCRIBER_ID", "AdmitDate","Patient ID HIE")]
 
 #Replaces NICNIC with NIC if it exists in any of the Subscriber IDs
 UMPT2$SUBSCRIBER_ID<-gsub("NICNIC", "NIC", UMPT2$SUBSCRIBER_ID)
