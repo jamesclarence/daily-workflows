@@ -26,8 +26,6 @@ uhi <- read.csv(text=data[2], row.names=NULL);
 #Deletes unused fields#
 UMPT$Practice<-NULL
 UMPT$PCP.Name<-NULL
-uhi$Patient.ID<-NULL
-UMPT$Patient.ID<-NULL
 
 #Adds  text identifiers to Subscriber_ID (NIC and U)#
 uhi$nic<-"NIC"
@@ -70,9 +68,10 @@ UMPT2<-reshape::rename(UMPT2, c(Inp..6mo.="Inp6mo"))
 UMPT2<-reshape::rename(UMPT2, c(ED..6mo.="ED6mo"))
 UMPT2<-reshape::rename(UMPT2, c(Patient.Class="PatientClass"))
 UMPT2<-reshape::rename(UMPT2, c(Subscriber.ID="SUBSCRIBER_ID_LINK"))
+UMPT2<-reshape::rename(UMPT2, c(Patient.ID="Patient ID HIE"))
 
 #Identifies the columns for the file to be exported#
-UMPT2<-UMPT2[,c("SUBSCRIBER_ID_LINK","AdmitDate","DischargeDate", "Facility", "PatientClass", "HistoricalDiagnosis", "Inp6mo", "ED6mo", "CurrentlyAdmitted")]
+UMPT2<-UMPT2[,c("SUBSCRIBER_ID_LINK","Patient ID HIE","AdmitDate","DischargeDate", "Facility", "PatientClass", "HistoricalDiagnosis", "Inp6mo", "ED6mo", "CurrentlyAdmitted")]
 
 #Replaces NICNIC with NIC if it exists in any of the Subscriber IDs
 UMPT2$SUBSCRIBER_ID_LINK<-gsub("NICNIC", "NIC", UMPT2$SUBSCRIBER_ID_LINK)
