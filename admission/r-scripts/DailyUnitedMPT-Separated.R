@@ -1,35 +1,26 @@
-options(warn=-1)
-
 # Packages
 suppressMessages(require(reshape))
-suppressMessages(require(jsonlite))
-
-# Load data from stdin
-data <- fromJSON(readLines(file("stdin")))
-UMPT <- read.csv(text=data[1], row.names=NULL);
-uhi <- read.csv(text=data[2], row.names=NULL);
 
 #Call temporary files and name it UMPT#
-# setwd("Y:/API/")
-# Lourdes<-read.csv(paste("Y:/API/", "lourdes-", Sys.Date(), ".csv", sep=""))
-# Amb<-read.csv(paste("Y:/API/", "cooper-ambulatory-", Sys.Date(), ".csv", sep=""))
-# Fam<-read.csv(paste("Y:/API/", "cooper-family-med-", Sys.Date(), ".csv", sep=""))
-# Phys<-read.csv(paste("Y:/API/", "cooper-physicians-", Sys.Date(), ".csv", sep=""))
-# AR<-read.csv(paste("Y:/API/", "acosta-ramon-", Sys.Date(), ".csv", sep=""))
-# fairview<-read.csv(paste("Y:/API/", "fairview-", Sys.Date(), ".csv", sep=""))
-# phope<-read.csv(paste("Y:/API/", "project-hope-", Sys.Date(), ".csv", sep=""))
-# reliance<-read.csv(paste("Y:/API/", "reliance-", Sys.Date(), ".csv", sep=""))
-# luke<-read.csv(paste("Y:/API/", "st-luke-", Sys.Date(), ".csv", sep=""))
-# uhi<-read.csv(paste("Y:/API/", "uhi-", Sys.Date(), ".csv", sep=""))
+Lourdes<-read.csv(paste("tmp/lourdes-", Sys.Date(), ".csv", sep=""))
+Amb<-read.csv(paste("tmp/cooper-ambulatory-", Sys.Date(), ".csv", sep=""))
+Fam<-read.csv(paste("tmp/cooper-family-med-", Sys.Date(), ".csv", sep=""))
+Phys<-read.csv(paste("tmp/cooper-physicians-", Sys.Date(), ".csv", sep=""))
+AR<-read.csv(paste("tmp/acosta-ramon-", Sys.Date(), ".csv", sep=""))
+fairview<-read.csv(paste("tmp/fairview-", Sys.Date(), ".csv", sep=""))
+phope<-read.csv(paste("tmp/project-hope-", Sys.Date(), ".csv", sep=""))
+reliance<-read.csv(paste("tmp/reliance-", Sys.Date(), ".csv", sep=""))
+luke<-read.csv(paste("tmp/st-luke-", Sys.Date(), ".csv", sep=""))
+uhi<-read.csv(paste("tmp/uhi-", Sys.Date(), ".csv", sep=""))
 
 #Binds practice data into one united file#
-# UMPT <- rbind(Lourdes,Amb,Fam,Phys,AR,fairview,phope,reliance,luke)
+UMPT <- rbind(Lourdes,Amb,Fam,Phys,AR,fairview,phope,reliance,luke)
 
 #Deletes unused fields#
 UMPT$Practice<-NULL
 UMPT$PCP.Name<-NULL
 
-# #Adds  text identifiers to Subscriber_ID (NIC and U)#
+#Adds  text identifiers to Subscriber_ID (NIC and U)#
 uhi$nic<-"NIC"
 uhi$Subscriber.ID<-paste(uhi$nic, uhi$Subscriber.ID, sep="")
 uhi$nic<-NULL

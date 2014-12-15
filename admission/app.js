@@ -24,9 +24,14 @@ configs.forEach(function(config) {
       var page = 1,
           results = [];
       getRecords(function(data) {
-        // needs an update
         output = data;
-        cb(null, output)
+        fs.writeFile('./tmp/' + source.name + '.csv', output, function(err) {
+          if (err) {
+            cb(err, null);
+          } else {
+            cb(null, true);
+          }
+        });
       });
       function getRecords(cb) {
         tv.views(source.view, { limit: 100, page: page }, function(err, res) {
@@ -98,13 +103,6 @@ configs.forEach(function(config) {
   }
 
   function sendOutput(data) {
-    var exec = require('child_process').exec;
-
-    // Remove temp files
-    exec('srm -sr ./tmp/*', function() {
-
-    });
-
     if (typeof config.output === 'string') {
       fs.writeFile(config.output, data, function(err) {
         if (err) throw err;
@@ -147,4 +145,10 @@ configs.forEach(function(config) {
     }
   }
 
+});
+
+process.on('exit', function() {
+  // Remove temp files
+  require('child_process').exec('srm -sr ./tmp/*');
+  console.log('Cleaning up temp files');
 });
