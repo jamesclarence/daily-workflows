@@ -13,97 +13,86 @@ configs.forEach(function(config) {
 
   if (typeof config.source === 'string') config.source = [config.source];
   config.sources.forEach(function(source, index) {
-    if (typeof source !== 'string') {
-      source.forEach(function(source) {
-        q.defer(loadSource, source, index);
-      });
-    } else {
-      q.defer(loadSource, source, 0);
-    }
+    q.defer(loadSource, source);
   });
   q.awaitAll(combineSources);
 
-  function loadSource(source, index, cb) {
-    var output = { key: index, items: [] };
+  function loadSource(source, cb) {
+    var output = '';
 
-    if (typeof source === 'object') {
-      if (source.type.toLowerCase() === 'trackvia') {
-        var page = 1,
-            results = [];
-        getRecords(function(data) {
-          output.items = data;
-          cb(null, output)
+    if (source.type && source.type.toLowerCase() === 'trackvia') {
+      var page = 1,
+          results = [];
+      getRecords(function(data) {
+        output = data;
+        fs.writeFile('./tmp/' + source.name + '.csv', output, function(err) {
+          if (err) {
+            cb(err, null);
+          } else {
+            cb(null, true);
+          }
         });
-        function getRecords(cb) {
-          tv.views(source.view, { limit: 100, page: page }, function(err, res) {
-            if (err) throw err;
-            if (res.records && res.records.length) {
-              results = results.concat(res.records);
-              page = page + 1;
-              getRecords(cb);
-            } else {
-              results = _(results).chain()
-                .map(function(item) { return item.fields; })
-                .sortBy(function(item) { return -_(item).size(); })
-                .value();
-              var csv = new CSV(results, { header: true, cast: false }).encode()
-                  .replace(/"undefined"/g, '""')
-                  .replace(/<!--tvia_br--><br><!--tvia_br-->/g, '\n');
-              cb(csv);
-            }
-          });
-        }
+      });
+      function getRecords(cb) {
+        tv.views(source.view, { limit: 100, page: page }, function(err, res) {
+          if (err) throw err;
+          if (res.records && res.records.length) {
+            results = results.concat(res.records);
+            page = page + 1;
+            getRecords(cb);
+          } else {
+            results = _(results).chain()
+              .map(function(item) { return item.fields; })
+              .sortBy(function(item) { return -_(item).size(); })
+              .value();
+            var csv = new CSV(results, { header: true, cast: false }).encode()
+                .replace(/"undefined"/g, '""')
+                .replace(/<!--tvia_br--><br><!--tvia_br-->/g, '\n');
+            cb(csv);
+          }
+        });
       }
     } else {
       var spawn = require('child_process').spawn,
           child = spawn('curl', [
-            '-s', '--ssl-reqd', '-K', 'ftp.config' , source
+            '-s', '--ssl-reqd', '-K', 'ftp.config' , source.url
           ], { maxBuffer: 200 * 1024 * 1024 });
 
       child.stdout.setEncoding('utf8');
       child.stderr.setEncoding('utf8');
-      child.stdout.on('data', function (data) { output.items.push(data); });
+      child.stdout.on('data', function (data) { output += data; });
       child.stderr.on('data', function (data) { cb(data, null); });
       child.on('exit', function (code, signal) {
-        output.items = output.items.join('');
-        cb(null, output);
+        if (!output.length) {
+          // TODO: retry downloading empty files after delay
+        }
+        fs.writeFile('./tmp/' + source.name + '.csv', output, function(err) {
+          if (err) {
+            cb(err, null);
+          } else {
+            cb(null, true);
+          }
+        });
       });
     }
   }
 
   function combineSources(err, data) {
-    if (!err && (!data || !data.length)) err = 'Sources returned no data.';
+    if (!err && !data) err = 'Sources returned no data.';
     if (err) throw err;
-    var output = data.reduce(function(memo, result) {
-          var lines = result.items.split('\n'),
-              headers = lines.shift();
-
-          memo[result.key] = memo[result.key] || [headers];
-          memo[result.key].push(lines);
-          return memo;
-        }, []);
-
-    output.forEach(function(arg, i) {
-      output[i] = arg.join('\n');
-    });
-
-    runProcess(output);
+    runProcess();
   }
 
-  function runProcess(data) {
+  function runProcess() {
     var spawn = require('child_process').spawn,
-        data = JSON.stringify(data),
         args = [config.script],
         child = spawn('Rscript', args),
-        output = [];
-
-    child.stdin.write(data + '\n');
-    child.stdin.end();
+        output = '';
 
     child.stdout.setEncoding('utf8');
     child.stderr.setEncoding('utf8');
     child.stdout.on('data', function(data) {
-      output.push(data);
+      output += data;
     });
     child.stderr.on('data', function(data) {
       console.log(data);
@@ -112,12 +101,11 @@ configs.forEach(function(config) {
       throw data;
     });
     child.on('exit', function(data) {
-      sendOutput(output.join(''));
+      sendOutput(output);
     });
   }
 
   function sendOutput(data) {
-
     if (typeof config.output === 'string') {
       fs.writeFile(config.output, data, function(err) {
         if (err) throw err;
@@ -160,4 +148,10 @@ configs.forEach(function(config) {
     }
   }
 
+});
+
+process.on('exit', function() {
+  // Remove temp files
+  require('child_process').exec('srm -sr ./tmp/*');
+  console.log('Cleaning up temp files');
 });

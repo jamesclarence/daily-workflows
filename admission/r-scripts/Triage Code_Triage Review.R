@@ -1,14 +1,8 @@
 # Packages
-require(reshape)
-require("jsonlite")
-
-# Load data from stdin
-data <- fromJSON(readLines(file("stdin")))
-CMITriage <- read.csv(text=data[1], row.names=NULL);
+suppressMessages(require(reshape))
 
 #Sets working directory, reads file and creates a nickname#
-# setwd("Y:/API/")
-# CMITriage <- read.csv("Y:/API/Admitted Past Month (High Use).csv", header=TRUE)
+CMITriage <- read.csv("tmp/Admitted Past Month (High Use).csv", header=TRUE)
 # write.csv(CMITriage, (file=paste ("CMI Admitted Past Month (High Use)", Sys.Date(), ".csv", sep="")), row.names=FALSE)
 
 #Splits the "Name" column into First and Last Name#
