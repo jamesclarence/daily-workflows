@@ -9,6 +9,22 @@ unified<-read.csv(paste("tmp/unified-", Sys.Date(), ".csv", sep=""))
 #Calls the master patient table from TrackVia > CMMI#
 mpt<-read.csv(paste("tmp/mpt-", Sys.Date(), ".csv", sep=""))
 
+#Cleans the Pre.Enrollment.Interview.Date field#
+mpt$Pre.Enrollment.Interview.Date<-gsub(" ", "/",mpt$Pre.Enrollment.Interview.Date)
+mpt$Pre.Enrollment.Interview.Date<-gsub("Jan", "01",mpt$Pre.Enrollment.Interview.Date)
+mpt$Pre.Enrollment.Interview.Date<-gsub("Feb", "02",mpt$Pre.Enrollment.Interview.Date)
+mpt$Pre.Enrollment.Interview.Date<-gsub("Mar", "03",mpt$Pre.Enrollment.Interview.Date)
+mpt$Pre.Enrollment.Interview.Date<-gsub("Apr", "04",mpt$Pre.Enrollment.Interview.Date)
+mpt$Pre.Enrollment.Interview.Date<-gsub("May", "05",mpt$Pre.Enrollment.Interview.Date)
+mpt$Pre.Enrollment.Interview.Date<-gsub("Jun", "06",mpt$Pre.Enrollment.Interview.Date)
+mpt$Pre.Enrollment.Interview.Date<-gsub("Jul", "07",mpt$Pre.Enrollment.Interview.Date)
+mpt$Pre.Enrollment.Interview.Date<-gsub("Aug", "08",mpt$Pre.Enrollment.Interview.Date)
+mpt$Pre.Enrollment.Interview.Date<-gsub("Sep", "09",mpt$Pre.Enrollment.Interview.Date)
+mpt$Pre.Enrollment.Interview.Date<-gsub("Oct", "10",mpt$Pre.Enrollment.Interview.Date)
+mpt$Pre.Enrollment.Interview.Date<-gsub("Nov", "11",mpt$Pre.Enrollment.Interview.Date)
+mpt$Pre.Enrollment.Interview.Date<-gsub("Dec", "12",mpt$Pre.Enrollment.Interview.Date)
+mpt$PreEnrollmentInterviewDate<-as.Date(mpt$Pre.Enrollment.Interview.Date, format="%m/%d/%Y")
+
 #Builds the UniqueID in the unified report to be able to compare to mpt#
 #Changes capitalized Name fields to title case#
 unified$Name<-tolower(unified$Name)
@@ -37,7 +53,7 @@ unified$DOB2<-format(unified$DOB1, "%m%d%Y")
 unified$UniqueID <- do.call(paste, c(unified[c("FN", "LN", "DOB2")], sep = ""))
 
 #Subsets only those enrolled or control from mpt#
-mpt2<-subset(mpt, Enrolled.=="Yes" | RCTStudyGroup=="Control")
+mpt2<-subset(mpt, !is.na(PreEnrollmentInterviewDate) | RCTStudyGroup=="Control")
 
 #Keeps the records in unified report that exist in mpt#
 readmit<-unified[unified$UniqueID %in% mpt2$UniqueID,]
@@ -63,9 +79,6 @@ readmit3<-reshape::rename(readmit3, c(readmit2.Visit.Type="VisitType"))
 readmit3<-reshape::rename(readmit3, c(readmit2.BulkImport="BulkImport"))
 readmit3<-reshape::rename(readmit3, c(readmit2.Discharge.Date..Day.="DischargeDate"))
 readmit3<-reshape::rename(readmit3, c(readmit2.Patient.ID="Patient ID"))
-
-#If there are any records here that are TRUE, review them before export. They should all be FALSE#
-# readmit3$FoundError<-ifelse(try(readmit3$Enrolled=="No" & readmit3$RCTStudyGroup!="Control")==TRUE, "Review Record", "")
 
 #Exports file#
 # write.csv(readmit3, (file=paste ("CMMI-Readmissions", format(Sys.Date(), "-%Y-%m-%d"), ".csv", sep="")), row.names=FALSE)
