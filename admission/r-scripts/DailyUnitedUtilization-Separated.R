@@ -70,5 +70,5 @@ UMPT2<-UMPT2[,c("SUBSCRIBER_ID_LINK","Patient ID HIE","AdmitDate","DischargeDate
 UMPT2$SUBSCRIBER_ID_LINK<-gsub("NICNIC", "NIC", UMPT2$SUBSCRIBER_ID_LINK)
 
 #Export csv file#
-# write.csv(UMPT2, (file=paste("output/DailyUnitedUtilization", format(Sys.Date(), "-%Y-%m-%d"), ".csv", sep="")), row.names=FALSE)
+# write.csv(UMPT2, (file=paste("DailyUnitedUtilization", format(Sys.Date(), "-%Y-%m-%d"), ".csv", sep="")), row.names=FALSE)
 write.csv(UMPT2, stdout(), row.names=FALSE)
