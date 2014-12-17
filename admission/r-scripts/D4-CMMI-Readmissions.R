@@ -1,5 +1,6 @@
 # Packages
 suppressMessages(require(data.table))
+suppressMessages(require(reshape))
 
 
 #Calls in all downloaded files from the HIE#
@@ -64,7 +65,7 @@ readmit3<-reshape::rename(readmit3, c(readmit2.Discharge.Date..Day.="DischargeDa
 readmit3<-reshape::rename(readmit3, c(readmit2.Patient.ID="Patient ID"))
 
 #If there are any records here that are TRUE, review them before export. They should all be FALSE#
-readmit3$FoundError<-ifelse(try(readmit3$Enrolled=="No" & readmit3$RCTStudyGroup!="Control")==TRUE, "Review Record", "")
+# readmit3$FoundError<-ifelse(try(readmit3$Enrolled=="No" & readmit3$RCTStudyGroup!="Control")==TRUE, "Review Record", "")
 
 #Exports file#
 # write.csv(readmit3, (file=paste ("CMMI-Readmissions", format(Sys.Date(), "-%Y-%m-%d"), ".csv", sep="")), row.names=FALSE)

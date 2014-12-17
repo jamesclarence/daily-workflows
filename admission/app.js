@@ -63,6 +63,9 @@ configs.forEach(function(config) {
       child.stdout.on('data', function (data) { output += data; });
       child.stderr.on('data', function (data) { cb(data, null); });
       child.on('exit', function (code, signal) {
+        if (!output.length) {
+          // TODO: retry downloading empty files after delay
+        }
         fs.writeFile('./tmp/' + source.name + '.csv', output, function(err) {
           if (err) {
             cb(err, null);
