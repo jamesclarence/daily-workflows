@@ -53,7 +53,7 @@ unified$DOB2<-format(unified$DOB1, "%m%d%Y")
 unified$UniqueID <- do.call(paste, c(unified[c("FN", "LN", "DOB2")], sep = ""))
 
 #Subsets only those enrolled or control from mpt#
-mpt2<-subset(mpt, !is.na(Pre.Enrollment.Interview.Date) | RCTStudyGroup=="Control")
+mpt2<-subset(mpt, !is.na(Pre.Enrollment.Interview.Date))
 
 #Keeps the records in unified report that exist in mpt#
 readmit<-unified[unified$UniqueID %in% mpt2$UniqueID,]
