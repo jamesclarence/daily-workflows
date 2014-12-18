@@ -37,12 +37,12 @@ unified$DOB2<-format(unified$DOB1, "%m%d%Y")
 unified$UniqueID <- do.call(paste, c(unified[c("FN", "LN", "DOB2")], sep = ""))
 
 #Keeps the records in unified report that exist in mpt#
-readmit<-unified[unified$UniqueID %in% mpt2$UniqueID,]
+readmit<-unified[unified$UniqueID %in% mpt$UniqueID,]
 
 #If the individual exists in the MPT, then it adds their RCTSTudyGroup#
 readmit<-data.table(readmit, key="UniqueID")
-mpt2<-data.table(mpt2, key="UniqueID")
-readmit2<-mpt2[readmit]
+mpt<-data.table(mpt2, key="UniqueID")
+readmit2<-mpt[readmit]
 
 readmit2$BulkImport<-"Import"
 
