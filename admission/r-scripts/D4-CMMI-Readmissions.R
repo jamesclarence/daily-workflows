@@ -41,7 +41,7 @@ readmit<-unified[unified$UniqueID %in% mpt$UniqueID,]
 
 #If the individual exists in the MPT, then it adds their RCTSTudyGroup#
 readmit<-data.table(readmit, key="UniqueID")
-mpt<-data.table(mpt2, key="UniqueID")
+mpt<-data.table(mpt, key="UniqueID")
 readmit2<-mpt[readmit]
 
 readmit2$BulkImport<-"Import"
