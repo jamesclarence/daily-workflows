@@ -3,7 +3,6 @@ suppressMessages(require(reshape))
 
 #Sets working directory, reads file and creates a nickname#
 CMITriage <- read.csv("tmp/Admitted Past Month (High Use).csv", header=TRUE)
-# write.csv(CMITriage, (file=paste ("CMI Admitted Past Month (High Use)", Sys.Date(), ".csv", sep="")), row.names=FALSE)
 
 #Splits the "Name" column into First and Last Name#
 CMITriage$LastName = as.character(lapply(strsplit(as.character(CMITriage$Name), split=", "), "[", 1))

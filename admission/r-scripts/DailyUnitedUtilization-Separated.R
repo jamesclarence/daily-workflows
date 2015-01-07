@@ -2,16 +2,16 @@
 suppressMessages(require(reshape))
 
 #Call temporary files and name it UMPT#
-Lourdes<-read.csv(paste("tmp/lourdes-", Sys.Date(), ".csv", sep=""))
-Amb<-read.csv(paste("tmp/cooper-ambulatory-", Sys.Date(), ".csv", sep=""))
-Fam<-read.csv(paste("tmp/cooper-family-med-", Sys.Date(), ".csv", sep=""))
-Phys<-read.csv(paste("tmp/cooper-physicians-", Sys.Date(), ".csv", sep=""))
-AR<-read.csv(paste("tmp/acosta-ramon-", Sys.Date(), ".csv", sep=""))
-fairview<-read.csv(paste("tmp/fairview-", Sys.Date(), ".csv", sep=""))
-phope<-read.csv(paste("tmp/project-hope-", Sys.Date(), ".csv", sep=""))
-reliance<-read.csv(paste("tmp/reliance-", Sys.Date(), ".csv", sep=""))
-luke<-read.csv(paste("tmp/st-luke-", Sys.Date(), ".csv", sep=""))
-uhi<-read.csv(paste("tmp/uhi-", Sys.Date(), ".csv", sep=""))
+Lourdes<-read.csv(paste("tmp/lourdes", ".csv", sep=""))
+Amb<-read.csv(paste("tmp/cooper-ambulatory", ".csv", sep=""))
+Fam<-read.csv(paste("tmp/cooper-family-med", ".csv", sep=""))
+Phys<-read.csv(paste("tmp/cooper-physicians", ".csv", sep=""))
+AR<-read.csv(paste("tmp/acosta-ramon", ".csv", sep=""))
+fairview<-read.csv(paste("tmp/fairview", ".csv", sep=""))
+phope<-read.csv(paste("tmp/project-hope", ".csv", sep=""))
+reliance<-read.csv(paste("tmp/reliance", ".csv", sep=""))
+luke<-read.csv(paste("tmp/st-luke", ".csv", sep=""))
+uhi<-read.csv(paste("tmp/uhi", ".csv", sep=""))
 
 #Binds practice data into one united file#
 UMPT <- rbind(Lourdes,Amb,Fam,Phys,AR,fairview,phope,reliance,luke)

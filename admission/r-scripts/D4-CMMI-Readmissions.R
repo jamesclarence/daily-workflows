@@ -4,10 +4,10 @@ suppressMessages(require(reshape))
 
 
 #Calls in all downloaded files from the HIE#
-unified<-read.csv(paste("tmp/unified-", Sys.Date(), ".csv", sep=""))
+unified<-read.csv(paste("tmp/unified", ".csv", sep=""))
 
 #Calls the master patient table from TrackVia > CMMI#
-mpt<-read.csv(paste("tmp/mpt-", Sys.Date(), ".csv", sep=""))
+mpt<-read.csv(paste("tmp/mpt", ".csv", sep=""))
 
 #Builds the UniqueID in the unified report to be able to compare to mpt#
 #Changes capitalized Name fields to title case#

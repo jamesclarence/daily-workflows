@@ -1,13 +1,44 @@
 var queue = require('queue-async'),
+    nodemailer = require('nodemailer'),
     tvConfig = require('./../config.json'),
     tv = require('trackvia')(tvConfig),
     configs = require('./config.json'),
     CSV = require('comma-separated-values'),
     fs = require('fs'),
-    _ = require('underscore');
+    _ = require('underscore'),
+    tasks = queue(1),
+    emailConfig = JSON.parse(fs.readFileSync('./email.config')),
+    mailer = nodemailer.createTransport({
+      service: 'Mandrill',
+      auth: {
+        user: emailConfig.username,
+        pass: emailConfig.password
+      }
+    });
 
-// Load files
 configs.forEach(function(config) {
+  tasks.defer(runTask, config);
+});
+
+// Send notifications
+tasks.awaitAll(function(err, data) {
+  var mailOptions = {
+    from: emailConfig.username,
+    to: emailConfig.to,
+    subject: emailConfig.subject,
+    text: emailConfig.message
+  };
+
+  mailer.sendMail(mailOptions, function(error, info) {
+    if(error) {
+      console.log(error);
+    } else {
+      console.log('Message sent: ' + info.response);
+    }
+  });
+});
+
+function runTask(config, nextTask) {
   var input = [],
       q = queue();
 
@@ -106,11 +137,42 @@ configs.forEach(function(config) {
   }
 
   function sendOutput(data) {
-    if (typeof config.output === 'string') {
-      fs.writeFile(config.output, data, function(err) {
+    var exec = require('child_process').exec;
+
+    if (typeof config.outputFile === 'string') {
+      fs.writeFile(config.outputFile, data, function(err) {
         if (err) throw err;
-        console.log('Saved file: ' + config.output);
+
+        var xlsFile = config.outputFile.replace(/\.csv$/, '.xls'),
+            cmd = 'csv2xls "' + config.outputFile + '" -o "' + xlsFile + '"';
+
+        console.log('Saved file: ' + config.outputFile);
+
+        // Convert to XLS
+        exec(cmd, function(stdout, stderr, err) {
+          if (err) throw err;
+          console.log('Saved file: ' + xlsFile);
+
+          // Upload to FTPS
+          var spawn = require('child_process').spawn,
+              child = spawn('curl', [
+                '-s', '--ssl-reqd',
+                '-T', xlsFile,
+                '-K', 'ftp.config',
+                'ftp://camdenhie.careevolution.com/CCHPProcessed/'
+              ], { maxBuffer: 200 * 1024 * 1024 }),
+              output = '';
+    
+          child.stdout.setEncoding('utf8');
+          child.stderr.setEncoding('utf8');
+          child.stderr.on('data', function (data) { cb(data, null); });
+          child.on('exit', function (code, signal) {
+            console.log('Uploaded file: ' + xlsFile);
+          });
+
+        });
       })
+      nextTask();
       return;
     }
 
@@ -119,17 +181,69 @@ configs.forEach(function(config) {
     switch (config.output.operation) {
       case 'add':
         tv.tables(config.output.table, function(err, res) {
-          if (err) console.warn(err);
-          var fields = res.coldefs.map(function(col) { return col.label; });
+          if (err) console.warn('Table loading error: ', err);
+          var fields = res.coldefs.map(function(col) { return col.label; }),
+              foreignKeys = {},
+              key_q = queue(1),
+              usedFields = [],
+              errors = [];
 
+          // Remove fields from data that aren't in the TV table
           data = _(data.map(function(item) {
             var out = {};
             fields.forEach(function(field) {
-              if (item[field]) out[field] = item[field];
+              if (item[field]) {
+                out[field] = item[field];
+                usedFields.push(field);
+              }
             });
             return out;
           })).filter(function(o) {return _(o).size(); });
 
+          // Find fields with foreign keys
+          res.coldefs.forEach(function(col) {
+            if (col.type === 'foreign_key') {
+              foreignKeys[col.label] = col.foreign_key_id;
+            }
+          });
+
+          // For each foreign key field that is actually used, get values
+          _(foreignKeys).forEach(function(value, key) {
+            if (usedFields.indexOf(key) >= 0) {
+              key_q.defer(function(cb) {
+                tv.tables(config.output.table, value, function(err, data) {
+                  var o = {};
+                  o[key] = data;
+                  cb(err, o);
+                });
+              });
+            }
+          });
+
+          key_q.awaitAll(function(err, keys) {
+            if (err) console.warn('Foreign key loading error: ', err);
+            keys = _(keys).reduce(function(item, memo) {
+              return _(memo).extend(item);
+            }, {});
+
+            // Loop through data, and filter out records that don't match keys
+            _(data).forEach(function(item, index) {
+              _(keys).forEach(function(parentKeys, field) {
+                if (parentKeys.indexOf(item[field]) < 0) {
+                  var errorItem = _(item).clone();
+                  errorItem['error_field'] = field;
+                  errors.push(errorItem);
+                  delete data[index];
+                }
+              });
+            });
+            data = _(data).compact();
+            fs.writeFileSync(config.outputFile + '.records.csv', JSON.stringify(data));
+            fs.writeFileSync(config.outputFile + '.errors.csv', JSON.stringify(errors));
+            nextTask();
+          });
+
+/*
           tv.records({
             method: 'POST',
             table_id: config.output.table,
@@ -138,6 +252,7 @@ configs.forEach(function(config) {
             if (err) console.warn(err);
             console.log(res);
           });
+*/
         });
         break;
       case 'update':
@@ -147,8 +262,7 @@ configs.forEach(function(config) {
 
     }
   }
-
-});
+}
 
 process.on('exit', function() {
   // Remove temp files
