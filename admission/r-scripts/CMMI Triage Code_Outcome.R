@@ -62,6 +62,10 @@ CMITriage3$Age<-NULL
 CMITriage3$Facility<-NULL
 CMITriage3$Gender<-NULL
 
+#Formats DOB field in prep for export
+CMITriage3$DOB <- as.POSIXct(CMITriage3$DOB, format="%m/%d/%Y")
+CMITriage3$DOB <- format(CMITriage3$DOB, "%Y-%m-%d")
+
 #Renames columns#
 CMITriage3<-reshape::rename(CMITriage3, c(Patient.ID="HIEID"))
 CMITriage3<-reshape::rename(CMITriage3, c(DOB="Date of Birth"))
