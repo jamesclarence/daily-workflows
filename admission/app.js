@@ -22,6 +22,10 @@ configs.forEach(function(config) {
 
 // Send notifications
 tasks.awaitAll(function(err, data) {
+
+  // TODO: Inline error images
+  // TODO: Send console output in email
+
   var mailOptions = {
     from: emailConfig.username,
     to: emailConfig.to,
@@ -32,8 +36,6 @@ tasks.awaitAll(function(err, data) {
   mailer.sendMail(mailOptions, function(error, info) {
     if(error) {
       console.log(error);
-    } else {
-      console.log('Message sent: ' + info.response);
     }
   });
 });
@@ -49,11 +51,12 @@ function runTask(config, nextTask) {
   q.awaitAll(combineSources);
 
   function loadSource(source, cb) {
-    var output = '';
+    var output = '',
+        downloadRetries = 0,
+        page = 1,
+        results = [];
 
     if (source.type && source.type.toLowerCase() === 'trackvia') {
-      var page = 1,
-          results = [];
       getRecords(function(data) {
         output = data;
         fs.writeFile('./tmp/' + source.name + '.csv', output, function(err) {
@@ -84,28 +87,37 @@ function runTask(config, nextTask) {
         });
       }
     } else {
+      downloadFile();
+    }
+
+    function downloadFile() {
+      downloadRetries++;
+
       var spawn = require('child_process').spawn,
           child = spawn('curl', [
             '-s', '--ssl-reqd', '-K', 'ftp.config' , source.url
           ], { maxBuffer: 200 * 1024 * 1024 });
-
       child.stdout.setEncoding('utf8');
       child.stderr.setEncoding('utf8');
       child.stdout.on('data', function (data) { output += data; });
       child.stderr.on('data', function (data) { cb(data, null); });
       child.on('exit', function (code, signal) {
-        if (!output.length) {
-          // TODO: retry downloading empty files after delay
+        if (!output.length && downloadRetries < 5) {
+          downloadFile();
+        } else if (!output.length) {
+          cb('File downloaded from FTP is empty. Is the FTP available?', null);
+        } else {
+          fs.writeFile('./tmp/' + source.name + '.csv', output, function(err) {
+            if (err) {
+              cb(err, null);
+            } else {
+              cb(null, true);
+            }
+          });
         }
-        fs.writeFile('./tmp/' + source.name + '.csv', output, function(err) {
-          if (err) {
-            cb(err, null);
-          } else {
-            cb(null, true);
-          }
-        });
       });
     }
+
   }
 
   function combineSources(err, data) {
@@ -140,6 +152,8 @@ function runTask(config, nextTask) {
     var exec = require('child_process').exec;
 
     if (typeof config.outputFile === 'string') {
+
+      // Save CSV file
       fs.writeFile(config.outputFile, data, function(err) {
         if (err) throw err;
 
@@ -148,7 +162,7 @@ function runTask(config, nextTask) {
 
         console.log('Saved file: ' + config.outputFile);
 
-        // Convert to XLS
+        // Save copy as XLS
         exec(cmd, function(stdout, stderr, err) {
           if (err) throw err;
           console.log('Saved file: ' + xlsFile);
@@ -167,105 +181,48 @@ function runTask(config, nextTask) {
           child.stderr.setEncoding('utf8');
           child.stderr.on('data', function (data) { cb(data, null); });
           child.on('exit', function (code, signal) {
-            console.log('Uploaded file: ' + xlsFile);
-          });
+            console.log('Uploaded file to FTP: ' + xlsFile);
 
-        });
-      })
-      nextTask();
-      return;
-    }
-
-    data = new CSV(data, { header: true, cast: false }).parse();
-
-    switch (config.output.operation) {
-      case 'add':
-        tv.tables(config.output.table, function(err, res) {
-          if (err) console.warn('Table loading error: ', err);
-          var fields = res.coldefs.map(function(col) { return col.label; }),
-              foreignKeys = {},
-              key_q = queue(1),
-              usedFields = [],
-              errors = [];
-
-          // Remove fields from data that aren't in the TV table
-          data = _(data.map(function(item) {
-            var out = {};
-            fields.forEach(function(field) {
-              if (item[field]) {
-                out[field] = item[field];
-                usedFields.push(field);
+            // Upload to TrackVia
+            var child = spawn('casperjs', [
+                  './tv-upload.js',
+                  config.output.table,
+                  config.outputFile.replace(/\.csv$/, '.xls'),
+                  config.output.fields
+                ]),
+                scriptName = config.script.split('/')[1].replace(/\.R$/, ''),
+                out = '',
+                err = ''
+          
+            console.log('Uploading ' + scriptName + ' to table: ' + config.output.tableName);
+          
+            child.stdout.setEncoding('utf8');
+            child.stderr.setEncoding('utf8');
+            child.stdout.on('data', function (data) { console.log(data); });
+            child.stderr.on('data', function (data) {
+              err += data;
+              console.warn(data);
+            });
+            child.on('exit', function (code, signal) {
+              console.log('------');
+              if (err.length) {
+                nextTask(err, null);
+              } else {
+                nextTask(null, true);
               }
             });
-            return out;
-          })).filter(function(o) {return _(o).size(); });
-
-          // Find fields with foreign keys
-          res.coldefs.forEach(function(col) {
-            if (col.type === 'foreign_key') {
-              foreignKeys[col.label] = col.foreign_key_id;
-            }
           });
 
-          // For each foreign key field that is actually used, get values
-          _(foreignKeys).forEach(function(value, key) {
-            if (usedFields.indexOf(key) >= 0) {
-              key_q.defer(function(cb) {
-                tv.tables(config.output.table, value, function(err, data) {
-                  var o = {};
-                  o[key] = data;
-                  cb(err, o);
-                });
-              });
-            }
-          });
-
-          key_q.awaitAll(function(err, keys) {
-            if (err) console.warn('Foreign key loading error: ', err);
-            keys = _(keys).reduce(function(item, memo) {
-              return _(memo).extend(item);
-            }, {});
-
-            // Loop through data, and filter out records that don't match keys
-            _(data).forEach(function(item, index) {
-              _(keys).forEach(function(parentKeys, field) {
-                if (parentKeys.indexOf(item[field]) < 0) {
-                  var errorItem = _(item).clone();
-                  errorItem['error_field'] = field;
-                  errors.push(errorItem);
-                  delete data[index];
-                }
-              });
-            });
-            data = _(data).compact();
-            fs.writeFileSync(config.outputFile + '.records.csv', JSON.stringify(data));
-            fs.writeFileSync(config.outputFile + '.errors.csv', JSON.stringify(errors));
-            nextTask();
-          });
-
-/*
-          tv.records({
-            method: 'POST',
-            table_id: config.output.table,
-            data: data,
-          }, function(err, res) {
-            if (err) console.warn(err);
-            console.log(res);
-          });
-*/
         });
-        break;
-      case 'update':
-        break;
-      case 'add-update':
-        break;
-
+      });
     }
+
   }
 }
 
 process.on('exit', function() {
   // Remove temp files
+  // Should also remove output files
   require('child_process').exec('srm -sr ./tmp/*');
   console.log('Cleaning up temp files');
 });
