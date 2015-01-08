@@ -1,4 +1,5 @@
-cchp-workflows
-==============
+# admissions workflow
 
-Scripts to automate CCHP's data processing workflows
+## Installation
+
+Requires `R` and `Rscript`, which might be in `/Library/Frameworks/R.framework/Resources/`
