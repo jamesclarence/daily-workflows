@@ -22,6 +22,8 @@ var process = require('system'),
 // Load the page
 casper.start('https://secure.trackvia.com/app/login', function() {
 
+  casper.capture('tmp/0.jpg');
+
   // Log in
   casper.then(function() {
     this.fill('form#webform-client-form-298', {
@@ -52,10 +54,14 @@ function run() {
   // Upload spreadsheet
   casper.thenOpen(uploadURL, function() {
     this.fill('form#main', { 'spreadsheetfile': file }, true);
+    casper.capture('tmp/1.jpg');
+
   })
 
   // Match upload fields
-  casper.then(function() {
+  casper.waitForSelector('form#main table tbody tr td:first-child', function() {
+    casper.capture('tmp/2.jpg');
+
     var sel = 'form#main table tbody tr td:first-child',
         ids = this.getElementsInfo(sel).map(function(el) {
           return el.text.replace('\n', '');
@@ -64,32 +70,50 @@ function run() {
           return 'col-' + ids.indexOf(field);
         });
     this.fill('form#main', { matches: matches }, true);
+    casper.capture('tmp/3.jpg');
+
   });
 
   // Upload or capture errors
   casper.then(function() {
+    casper.capture('tmp/4.jpg');
+
     if (this.fetchText('h1') === 'Internal Server Error') {
       this.capture('tmp/error' + tableID + '.jpg');
       setTimeout(function() {
         casper.die('Internal server error.', 1);
       }, 0);
     }
-    var sel = 'form#main input[type="submit"]';
-    if (this.exists(sel)) {
+    if (this.getElementInfo('.container_err_msg').text.length > 0) {
       this.capture('tmp/error' + tableID + '.jpg');
       setTimeout(function() {
         casper.die('Error uploading file.', 1);
       }, 0);
     }
+    casper.capture('tmp/5.jpg');
+
+    setTimeout(function() {
+      console.log(window.location.href);
+      casper.capture('tmp/5a.jpg');
+      if (window.location.href === 'https://secure.trackvia.com/app/import') {
+        casper.die('Failed to load file.', 1);
+        casper.capture('tmp/error5.jpg');
+      }
+    }, 30 * 1000);
+
+
   });
 
   // Wait until upload finishes
   casper.waitForUrl(/&action=complete$/, function() {
+    casper.capture('tmp/6.jpg');
+
     var text = this.fetchText('#container-main')
       .trim()
       .replace('Click to return to Table Overview page.', '');
 
     this.echo(text);
+    casper.capture('tmp/7.jpg');
   }, function() {
     this.echo('Timed out waiting for upload');
   });

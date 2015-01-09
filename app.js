@@ -265,7 +265,7 @@ function runTask(config, nextTask) {
 
 process.on('exit', function() {
   // Remove temp and output files
-  //require('child_process').exec('srm -sr ./tmp/*');
-  //require('child_process').exec('srm -sr ./output/*');
+  require('child_process').exec('srm -sr ./tmp/*');
+  require('child_process').exec('srm -sr ./output/*');
   console.log('Cleaning up temp files');
 });
