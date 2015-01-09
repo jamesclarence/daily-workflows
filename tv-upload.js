@@ -1,7 +1,7 @@
 var process = require('system'),
     casper = require('casper').create({
-      timeout: 1000 * 60 * 60,
-      waitTimeout: 1000 * 60 * 60,
+      timeout: 1000 * 60 * 45,
+      waitTimeout: 1000 * 60 * 45,
       viewportSize: { width: 800, height: 600 },
       onTimeout: run,
       onError: function() { this.capture('tmp/error' + tableID + '.jpg'); }
@@ -55,11 +55,10 @@ function run() {
   casper.thenOpen(uploadURL, function() {
     this.fill('form#main', { 'spreadsheetfile': file }, true);
     casper.capture('tmp/1.jpg');
-
-  })
+  });
 
   // Match upload fields
-  casper.waitForSelector('form#main table tbody tr td:first-child', function() {
+  casper.waitForSelector('form#main table tbody tr td:first-child', function loadTableFinished() {
     casper.capture('tmp/2.jpg');
 
     var sel = 'form#main table tbody tr td:first-child',
@@ -72,49 +71,29 @@ function run() {
     this.fill('form#main', { matches: matches }, true);
     casper.capture('tmp/3.jpg');
 
-  });
+  }, function loadTableTimedout() {
+    run();
+  }, 1000 * 60 * 30);
 
-  // Upload or capture errors
-  casper.then(function() {
+  casper.waitForText('Importing file...', function importingFinished() {
     casper.capture('tmp/4.jpg');
-
-    if (this.fetchText('h1') === 'Internal Server Error') {
-      this.capture('tmp/error' + tableID + '.jpg');
-      setTimeout(function() {
-        casper.die('Internal server error.', 1);
-      }, 0);
-    }
-    if (this.getElementInfo('.container_err_msg').text.length > 0) {
-      this.capture('tmp/error' + tableID + '.jpg');
-      setTimeout(function() {
-        casper.die('Error uploading file.', 1);
-      }, 0);
-    }
-    casper.capture('tmp/5.jpg');
-
+  }, function importingTimedout() {
+    casper.capture('tmp/error' + tableID + '.jpg');
     setTimeout(function() {
-      console.log(window.location.href);
-      casper.capture('tmp/5a.jpg');
-      if (window.location.href === 'https://secure.trackvia.com/app/import') {
-        casper.die('Failed to load file.', 1);
-        casper.capture('tmp/error5.jpg');
-      }
-    }, 30 * 1000);
-
-
-  });
+      casper.die('Internal server error.', 1);
+    }, 0);
+  }, 1000 * 60 * 1);
 
   // Wait until upload finishes
-  casper.waitForUrl(/&action=complete$/, function() {
-    casper.capture('tmp/6.jpg');
+  casper.waitForUrl(/&action=complete$/, function importingFinished() {
+    casper.capture('tmp/5.jpg');
 
     var text = this.fetchText('#container-main')
       .trim()
       .replace('Click to return to Table Overview page.', '');
 
     this.echo(text);
-    casper.capture('tmp/7.jpg');
-  }, function() {
-    this.echo('Timed out waiting for upload');
-  });
+  }, function importingTimedout() {
+    run();
+  }, 1000 * 60 * 30);
 }
