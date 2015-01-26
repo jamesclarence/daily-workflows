@@ -30,7 +30,8 @@ var queue = require('queue-async'),
     }),
     images = [],
     logs = '',
-    log = console.log;
+    log = console.log,
+    timeout = 1000 * 30; // 30 seconds
 
 // Capture console.log
 console.log = function(){
@@ -50,10 +51,13 @@ tasks.awaitAll(function(err, data) {
     console.warn(err);
   }
 
+  var subject = (images.length) ? 'Import Error: ' + emailConfig.subject :
+                                  'Success: ' + emailConfig.subject;
+
   var mailOptions = {
     from: emailConfig.username,
     to: emailConfig.to,
-    subject: emailConfig.subject,
+    subject: subject,
     attachments: images,
     html: emailConfig.message + logs 
   };
@@ -122,6 +126,7 @@ function runTask(config, nextTask) {
     // Download files from FTP server
     function downloadFile() {
       downloadRetries++;
+      output = '';
 
       var spawn = require('child_process').spawn,
           child = spawn('curl', [
@@ -133,7 +138,7 @@ function runTask(config, nextTask) {
       child.stderr.on('data', function (data) { cb(data, null); });
       child.on('exit', function (code, signal) {
         if (!output.length && downloadRetries < 5) {
-          downloadFile();
+          setTimeout(downloadFile, timeout);
         } else if (!output.length) {
           cb('File downloaded from FTP is empty. Is the FTP available?', null);
         } else {

@@ -1,7 +1,7 @@
 var process = require('system'),
     casper = require('casper').create({
-      timeout: 1000 * 60 * 45,
-      waitTimeout: 1000 * 60 * 45,
+      timeout: 1000 * 60 * 30,
+      waitTimeout: 1000 * 60 * 30,
       viewportSize: { width: 800, height: 600 },
       onTimeout: run,
       onError: function() { this.capture('tmp/error' + tableID + '.jpg'); }
@@ -12,6 +12,7 @@ var process = require('system'),
     },
     retries = 0,
     retriesMax = 5,
+    timeout = 1000 * 30,
     args = casper.cli.args,
     tableID = args[0],
     file = args[1],
@@ -72,7 +73,7 @@ function run() {
     casper.capture('tmp/3.jpg');
 
   }, function loadTableTimedout() {
-    run();
+    setTimeout(run, timeout);
   }, 1000 * 60 * 30);
 
   casper.waitForText('Importing file...', function importingFinished() {
@@ -80,7 +81,7 @@ function run() {
   }, function importingTimedout() {
     casper.capture('tmp/error' + tableID + '.jpg');
     setTimeout(function() {
-      casper.die('Internal server error.', 1);
+      casper.die('Upload failed. Internal server error.', 1);
     }, 0);
   }, 1000 * 60 * 1);
 
@@ -94,6 +95,6 @@ function run() {
 
     this.echo(text);
   }, function importingTimedout() {
-    run();
+    setTimeout(run, timeout);
   }, 1000 * 60 * 30);
 }
