@@ -1,52 +1,6 @@
 [
 
-  {
-    "sources": [
-        { "name": "lourdes", "url": "ftp://camdenhie.careevolution.com/Extract/Reports/Lourdes.csv" },
-        { "name": "cooper-ambulatory", "url": "ftp://camdenhie.careevolution.com/Extract/Reports/Cooper%20Ambulatory.csv" },
-        { "name": "cooper-family-med", "url": "ftp://camdenhie.careevolution.com/Extract/Reports/Cooper%20Family%20Med.csv" },
-        { "name": "cooper-physicians", "url": "ftp://camdenhie.careevolution.com/Extract/Reports/Cooper%20Physicians.csv" },
-        { "name": "acosta-ramon", "url": "ftp://camdenhie.careevolution.com/Extract/Reports/Acosta%20Ramon.csv" },
-        { "name": "fairview", "url": "ftp://camdenhie.careevolution.com/Extract/Reports/Fairview.csv" },
-        { "name": "project-hope", "url": "ftp://camdenhie.careevolution.com/Extract/Reports/Project%20HOPE%20(United).csv" },
-        { "name": "reliance", "url": "ftp://camdenhie.careevolution.com/Extract/Reports/Reliance.csv" },
-        { "name": "st-luke", "url": "ftp://camdenhie.careevolution.com/Extract/Reports/St%20Lukes%20(United).csv" },
-        { "name": "uhi", "url": "ftp://camdenhie.careevolution.com/Extract/Reports/Cooper%20UHI.csv" }
-    ],
-    "script": "r-scripts/DailyUnitedMPT-Separated.R",
-    "outputFile": "output/DailyUnitedMPT-Separated.csv",
-    "output": {
-      "table": "5000004641",
-      "fields": "SUBSCRIBER_ID",
-      "tableName": "Master Patient Table",
-      "appName": "United Application"
-    }
 
-  },
-
-  {
-    "sources": [
-        { "name": "lourdes", "url": "ftp://camdenhie.careevolution.com/Extract/Reports/Lourdes.csv" },
-        { "name": "cooper-ambulatory", "url": "ftp://camdenhie.careevolution.com/Extract/Reports/Cooper%20Ambulatory.csv" },
-        { "name": "cooper-family-med", "url": "ftp://camdenhie.careevolution.com/Extract/Reports/Cooper%20Family%20Med.csv" },
-        { "name": "cooper-physicians", "url": "ftp://camdenhie.careevolution.com/Extract/Reports/Cooper%20Physicians.csv" },
-        { "name": "acosta-ramon", "url": "ftp://camdenhie.careevolution.com/Extract/Reports/Acosta%20Ramon.csv" },
-        { "name": "fairview", "url": "ftp://camdenhie.careevolution.com/Extract/Reports/Fairview.csv" },
-        { "name": "project-hope", "url": "ftp://camdenhie.careevolution.com/Extract/Reports/Project%20HOPE%20(United).csv" },
-        { "name": "reliance", "url": "ftp://camdenhie.careevolution.com/Extract/Reports/Reliance.csv" },
-        { "name": "st-luke", "url": "ftp://camdenhie.careevolution.com/Extract/Reports/St%20Lukes%20(United).csv" },
-        { "name": "uhi", "url": "ftp://camdenhie.careevolution.com/Extract/Reports/Cooper%20UHI.csv" }
-    ],
-    "script": "r-scripts/DailyUnitedUtilization-Separated.R",
-    "outputFile": "output/DailyUnitedUtilization-Separated.csv",
-    "output": {
-      "table": "5000004642",
-      "fields": "SUBSCRIBER_ID_LINK,AdmitDate,Facility,PatientClass",
-      "tableName": "Utilization Tracker",
-      "appName": "United Application"
-    }
-
-  },
 
   {
     "sources": [
@@ -55,7 +9,7 @@
     "script": "r-scripts/CMMI Triage Code_Outcome.R",
     "outputFile": "output/CMMI Triage Code_Outcome.csv",
     "output": {
-      "table": "5000004643",
+      "table": "5000002691",
       "fields": "PatientID2",
       "tableName": "Triage Outcome",
       "appName": "Patient Selection"
@@ -69,7 +23,7 @@
     "script": "r-scripts/Triage Code_Triage Review.R",
     "outputFile": "output/Triage Code_Triage Review.csv",
     "output": {
-      "table": "5000004644",
+      "table": "5000002690",
       "fields": "PatientID,Admit Date,Facility",
       "tableName": "Triage Review Table",
       "appName": "Patient Selection"
@@ -88,7 +42,7 @@
     "script": "r-scripts/D4-CMMI-Readmissions.R",
     "outputFile": "output/D4-CMMI-Readmissions.csv",
     "output": {
-      "table": "5000004646",
+      "table": "5000004149",
       "fields": "UniqueID,AdmitDate,VisitType,Facility",
       "tableName": "Readmissions",
       "appName": "CMMI"
