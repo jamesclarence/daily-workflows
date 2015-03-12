@@ -83,7 +83,7 @@ function run() {
     setTimeout(function() {
       casper.die('Upload failed. Internal server error.', 1);
     }, 0);
-  }, 1000 * 60 * 1);
+  }, 1000 * 60 * 5);
 
   // Wait until upload finishes
   casper.waitForUrl(/&action=complete$/, function importingFinished() {
