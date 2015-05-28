@@ -25,4 +25,4 @@ praCAP<-reshape::rename(praCAP, c(Subscriber.ID="SUBSCRIBER_ID"))
 praCAP<-reshape::rename(praCAP, c(HIE.ID="HIE Import Link"))
 
 #Exports csv files
-write.csv(praCAP, (file=paste ("PRA-CAP-", format(Sys.Date(), "%Y-%m-%d"), ".csv", sep="")), row.names=FALSE)
+write.csv(praCAP, (file=paste ("PRA-Cap-", format(Sys.Date(), "%Y-%m-%d"), ".csv", sep="")), row.names=FALSE)
