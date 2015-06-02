@@ -18,7 +18,7 @@ praCAP<-pra4[,c("Subscriber.ID", "HIE.ID")]
 
 #Renames fields
 praCAP<-reshape::rename(praCAP, c(Subscriber.ID="SUBSCRIBER_ID"))
-praCAP<-reshape::rename(praCAP, c(HIE.ID="HIE Import Link"))
+praCAP<-reshape::rename(praCAP, c(HIE.ID="Patient ID HIE"))
 
 #Exports csv files
 #write.csv(praCAP, (file=paste ("PRA-Cap", ".csv", sep="")), row.names=FALSE)
