@@ -17,7 +17,7 @@ uhi     <-read.csv(paste("tmp/uhi", ".csv", sep=""),stringsAsFactors=FALSE)
 #Rename fields in UHI file
 uhi<-reshape::rename(uhi, c(Last.Provider="Provider"))
 
-#Deletes unsued fields
+#Deletes unused fields
 uhi$PCP.Name<-""
 uhi$Practice<-""
 uhi$Source<-""
