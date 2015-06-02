@@ -3,21 +3,21 @@ library(reshape)
 library(gtools)
 
 #Sets the working directory
-path<-setwd("Y:/Data Share Daily/API/ACO Automation/")
+path<-setwd("tmp/")
 
 #Reads in files
-acompt     <-read.csv(paste(path,"/", "daily_aco_mpt_export_", Sys.Date(),"_1", ".csv", sep=""), stringsAsFactors=FALSE)
-Lourdes <-read.csv(paste(path,"/", "lourdes-", Sys.Date(), ".csv", sep=""), stringsAsFactors=FALSE)
-Amb     <-read.csv(paste(path, "/","cooper-ambulatory-", Sys.Date(), ".csv", sep=""),stringsAsFactors=FALSE)
-Fam     <-read.csv(paste(path, "/","cooper-family-med-", Sys.Date(), ".csv", sep=""),stringsAsFactors=FALSE)
-Phys    <-read.csv(paste(path,"/", "cooper-physicians-", Sys.Date(), ".csv", sep=""),stringsAsFactors=FALSE)
-AR      <-read.csv(paste(path, "/","acosta-ramon-", Sys.Date(), ".csv", sep=""),stringsAsFactors=FALSE)
-fairview<-read.csv(paste(path, "/","fairview-", Sys.Date(), ".csv", sep=""),stringsAsFactors=FALSE)
-phope   <-read.csv(paste(path,"/", "project-hope-", Sys.Date(), ".csv", sep=""),stringsAsFactors=FALSE)
-reliance<-read.csv(paste(path,"/", "reliance-", Sys.Date(), ".csv", sep=""),stringsAsFactors=FALSE)
-luke    <-read.csv(paste(path,"/", "st-luke-", Sys.Date(), ".csv", sep=""),stringsAsFactors=FALSE)
-kylewill<-read.csv(paste(path,"/", "kyle-will-", Sys.Date(), ".csv", sep=""),stringsAsFactors=FALSE)
-uhi     <-read.csv(paste(path,"/", "uhi-", Sys.Date(), ".csv", sep=""),stringsAsFactors=FALSE)
+acompt  <-read.csv(paste(path,"acompt",".csv", sep=""), stringsAsFactors=FALSE)
+AR      <-read.csv(paste(path,"acosta-ramon", ".csv", sep=""),stringsAsFactors=FALSE)
+Amb     <-read.csv(paste(path,"cooper-ambulatory", ".csv", sep=""),stringsAsFactors=FALSE)
+Fam     <-read.csv(paste(path,"cooper-family-med", ".csv", sep=""),stringsAsFactors=FALSE)
+Phys    <-read.csv(paste(path,"cooper-physicians", ".csv", sep=""),stringsAsFactors=FALSE)
+fairview<-read.csv(paste(path,"fairview", ".csv", sep=""),stringsAsFactors=FALSE)
+kylewill<-read.csv(paste(path,"kyle-will", ".csv", sep=""),stringsAsFactors=FALSE)
+Lourdes <-read.csv(paste(path,"lourdes", ".csv", sep=""), stringsAsFactors=FALSE)
+phope   <-read.csv(paste(path,"project-hope", ".csv", sep=""),stringsAsFactors=FALSE)
+reliance<-read.csv(paste(path,"reliance", ".csv", sep=""),stringsAsFactors=FALSE)
+luke    <-read.csv(paste(path,"st-luke", ".csv", sep=""),stringsAsFactors=FALSE)
+uhi     <-read.csv(paste(path,"uhi", ".csv", sep=""),stringsAsFactors=FALSE)
 
 #Rename fields in UHI file
 uhi<-reshape::rename(uhi, c(Last.Provider="Provider"))
@@ -31,7 +31,7 @@ uhi$Source<-""
 uhi$Subscriber.ID<-ifelse(grepl("NIC", uhi$Subscriber.ID), uhi$Subscriber.ID, paste("NIC", uhi$Subscriber.ID, sep=""))
 
 #Appends all files
-aco <- rbind(Lourdes,Amb,Fam,Phys,luke,phope,fairview,reliance,AR,kylewill)
+aco <- rbind(Amb,AR,fairview,Fam,kylewill,Lourdes,luke,phope,Phys,reliance)
 
 #Sorts columns alphabetically
 aco <- aco[,order(names(aco))]
@@ -65,4 +65,4 @@ acoMPT<-reshape::rename(acoMPT, c(Patient.ID="HIE Import Link"))
 acoMPT$Subscriber.ID<-NULL
 
 #Exports csv file
-write.csv(acoMPT, (file=paste ("ACO-MPT-", format(Sys.Date(), "%Y-%m-%d"), ".csv", sep="")), row.names=FALSE)
+write.csv(acoMPT, (file=paste ("ACO-MPT", ".csv", sep="")), row.names=FALSE)
