@@ -6,6 +6,7 @@ library(gtools)
 path<-setwd("tmp/")
 
 #Reads in files
+caplist <-read.csv(paste(path,"caplist",  ".csv", sep=""), stringsAsFactors=FALSE)
 AR      <-read.csv(paste(path,"acosta-ramon", ".csv", sep=""),stringsAsFactors=FALSE)
 Amb     <-read.csv(paste(path,"cooper-ambulatory", ".csv", sep=""),stringsAsFactors=FALSE)
 Fam     <-read.csv(paste(path,"cooper-family-med", ".csv", sep=""),stringsAsFactors=FALSE)
@@ -17,7 +18,6 @@ phope   <-read.csv(paste(path,"project-hope", ".csv", sep=""),stringsAsFactors=F
 reliance<-read.csv(paste(path,"reliance", ".csv", sep=""),stringsAsFactors=FALSE)
 luke    <-read.csv(paste(path,"st-luke", ".csv", sep=""),stringsAsFactors=FALSE)
 uhi     <-read.csv(paste(path,"uhi", ".csv", sep=""),stringsAsFactors=FALSE)
-caplist <-read.csv(paste(path,"caplist",  ".csv", sep=""), stringsAsFactors=FALSE)
 
 #Rename fields in UHI file
 uhi<-reshape::rename(uhi, c(Last.Provider="Provider"))
