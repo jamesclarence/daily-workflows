@@ -65,4 +65,5 @@ acoMPT<-reshape::rename(acoMPT, c(Patient.ID="HIE Import Link"))
 acoMPT$Subscriber.ID<-NULL
 
 #Exports csv file
-write.csv(acoMPT, (file=paste ("ACO-MPT", ".csv", sep="")), row.names=FALSE)
+#write.csv(acoMPT, (file=paste ("ACO-MPT", ".csv", sep="")), row.names=FALSE)
+write.csv(acoMPT, stdout(), row.names=FALSE)
