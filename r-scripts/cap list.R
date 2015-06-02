@@ -63,4 +63,5 @@ acoCAP<-reshape::rename(acoCAP, c(Subscriber.ID  ="SUBSCRIBER_ID"))
 acoCAP<-reshape::rename(acoCAP, c(Patient.ID="HIE Import Link"))
 
 #Exports csv file
-write.csv(acoCAP, (file=paste ("ACO-Cap", ".csv", sep="")), row.names=FALSE)
+#write.csv(acoCAP, (file=paste ("ACO-Cap", ".csv", sep="")), row.names=FALSE)
+write.csv(acoCAP, stdout(), row.names=FALSE)
