@@ -6,7 +6,7 @@ library(gtools)
 path<-setwd("Y:/Data Share Daily/API/ACO Automation/")
 
 #Reads in files
-mpt     <-read.csv(paste(path,"/", "daily_aco_mpt_export_", Sys.Date(),"_1", ".csv", sep=""), stringsAsFactors=FALSE)
+acompt     <-read.csv(paste(path,"/", "daily_aco_mpt_export_", Sys.Date(),"_1", ".csv", sep=""), stringsAsFactors=FALSE)
 Lourdes <-read.csv(paste(path,"/", "lourdes-", Sys.Date(), ".csv", sep=""), stringsAsFactors=FALSE)
 Amb     <-read.csv(paste(path, "/","cooper-ambulatory-", Sys.Date(), ".csv", sep=""),stringsAsFactors=FALSE)
 Fam     <-read.csv(paste(path, "/","cooper-family-med-", Sys.Date(), ".csv", sep=""),stringsAsFactors=FALSE)
@@ -53,7 +53,7 @@ aco2$DischargeDate <- gsub("\\(.*\\)","\\1", aco2$DischargeDate)
 aco2$CurrentlyAdmitted <- ifelse(aco2$CurrentlyAdmitted == aco2$DischargeDate, "", aco2$CurrentlyAdmitted)
 
 #Identifies missing HIE Import Link values
-aco2<-subset(aco2, !(aco2$Patient.ID %in% mpt$HIE.Import.Link))
+aco2<-subset(aco2, !(aco2$Patient.ID %in% acompt$HIE.Import.Link))
 
 #Identifies the columns for the two lists to be exported
 acoMPT<-aco2[,c("Patient.ID", "Subscriber.ID")]
