@@ -27,4 +27,5 @@ praMPT<-reshape::rename(praMPT, c(HIE.ID="HIE Import Link"))
 praMPT$Subscriber.ID<-NULL
 
 #Exports csv files
-write.csv(praMPT, (file=paste ("PRA-MPT",".csv", sep="")), row.names=FALSE)
+#write.csv(praMPT, (file=paste ("PRA-MPT",".csv", sep="")), row.names=FALSE)
+write.csv(praMPT, stdout(), row.names=FALSE)
