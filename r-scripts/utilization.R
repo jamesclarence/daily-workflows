@@ -1,21 +1,18 @@
 #Attaches packages the script needs to run
 library(reshape)
 
-#Sets the working directory
-path<-setwd("tmp/")
-
 #Reads in files
-AR      <-read.csv(paste(path,"acosta-ramon", ".csv", sep=""),stringsAsFactors=FALSE)
-Amb     <-read.csv(paste(path,"cooper-ambulatory", ".csv", sep=""),stringsAsFactors=FALSE)
-Fam     <-read.csv(paste(path,"cooper-family-med", ".csv", sep=""),stringsAsFactors=FALSE)
-Phys    <-read.csv(paste(path,"cooper-physicians", ".csv", sep=""),stringsAsFactors=FALSE)
-fairview<-read.csv(paste(path,"fairview", ".csv", sep=""),stringsAsFactors=FALSE)
-kylewill<-read.csv(paste(path,"kyle-will", ".csv", sep=""),stringsAsFactors=FALSE)
-Lourdes <-read.csv(paste(path,"lourdes", ".csv", sep=""), stringsAsFactors=FALSE)
-phope   <-read.csv(paste(path,"project-hope", ".csv", sep=""),stringsAsFactors=FALSE)
-reliance<-read.csv(paste(path,"reliance", ".csv", sep=""),stringsAsFactors=FALSE)
-luke    <-read.csv(paste(path,"st-luke", ".csv", sep=""),stringsAsFactors=FALSE)
-uhi     <-read.csv(paste(path,"uhi", ".csv", sep=""),stringsAsFactors=FALSE)
+AR      <-read.csv(paste("tmp/acosta-ramon", ".csv", sep=""),stringsAsFactors=FALSE)
+Amb     <-read.csv(paste("tmp/cooper-ambulatory", ".csv", sep=""),stringsAsFactors=FALSE)
+Fam     <-read.csv(paste("tmp/cooper-family-med", ".csv", sep=""),stringsAsFactors=FALSE)
+Phys    <-read.csv(paste("tmp/cooper-physicians", ".csv", sep=""),stringsAsFactors=FALSE)
+fairview<-read.csv(paste("tmp/fairview", ".csv", sep=""),stringsAsFactors=FALSE)
+kylewill<-read.csv(paste("tmp/kyle-will", ".csv", sep=""),stringsAsFactors=FALSE)
+Lourdes <-read.csv(paste("tmp/lourdes", ".csv", sep=""), stringsAsFactors=FALSE)
+phope   <-read.csv(paste("tmp/project-hope", ".csv", sep=""),stringsAsFactors=FALSE)
+reliance<-read.csv(paste("tmp/reliance", ".csv", sep=""),stringsAsFactors=FALSE)
+luke    <-read.csv(paste("tmp/st-luke", ".csv", sep=""),stringsAsFactors=FALSE)
+uhi     <-read.csv(paste("tmp/uhi", ".csv", sep=""),stringsAsFactors=FALSE)
 
 #Rename fields in UHI file
 uhi<-reshape::rename(uhi, c(Last.Provider="Provider"))
