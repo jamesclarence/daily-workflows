@@ -73,4 +73,5 @@ acoUtilization<-reshape::rename(acoUtilization, c(ED..6mo.="ED6mo"))
 
 
 #Exports csv file
-write.csv(acoUtilization, (file=paste("ACO-Utilizations", ".csv", sep="")), row.names=FALSE)
+#write.csv(acoUtilization, (file=paste("ACO-Utilizations", ".csv", sep="")), row.names=FALSE)
+write.csv(acoUtilization, stdout(), row.names=FALSE)
