@@ -1,6 +1,5 @@
 #Attaches packages the script needs to run
 library(reshape)
-library(gtools)
 
 #Sets the working directory
 path<-setwd("tmp/")
