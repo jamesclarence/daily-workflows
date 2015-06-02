@@ -33,4 +33,5 @@ pra5<-reshape::rename(pra5, c(PRA.Facility.Updated="PRA Facility Updated"))
 pra5<-reshape::rename(pra5, c(PRA.PATID="PRA PATID"))
 
 #Exports csv files
-write.csv(pra5, (file=paste ("PRA-Table", ".csv", sep="")), row.names=FALSE)
+#write.csv(pra5, (file=paste ("PRA-Table", ".csv", sep="")), row.names=FALSE)
+write.csv(pra5, stdout(), row.names=FALSE)
