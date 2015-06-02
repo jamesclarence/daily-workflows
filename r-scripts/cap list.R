@@ -56,7 +56,7 @@ acoCAP<-data.frame(aco2[,c("Subscriber.ID","Patient.ID")])
 
 #Renames fields to import
 acoCAP<-reshape::rename(acoCAP, c(Subscriber.ID  ="SUBSCRIBER_ID"))
-acoCAP<-reshape::rename(acoCAP, c(Patient.ID="HIE Import Link"))
+acoCAP<-reshape::rename(acoCAP, c(Patient.ID="Patient ID HIE"))
 
 #Exports csv file
 #write.csv(acoCAP, (file=paste ("ACO-Cap", ".csv", sep="")), row.names=FALSE)
