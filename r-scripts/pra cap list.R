@@ -2,7 +2,7 @@
 library(reshape)
 
 #Reads in files
-caplist <-read.csv(paste("tmp/pracaplist",".csv", sep=""), stringsAsFactors=FALSE)
+caplist <-read.csv(paste("tmp/caplist",".csv", sep=""), stringsAsFactors=FALSE)
 pra     <-read.csv(paste("tmp/pra",".csv", sep=""), stringsAsFactors=FALSE)
 
 #Subsets only those with a Subscriber ID and with a PRA Creation Date, and those who don't have NIC in their Subscriber ID
