@@ -34,27 +34,6 @@
     {
         "sources": [
             {
-                "name": "unified",
-                "url": "ftp://camdenhie.careevolution.com/Extract/Reports/Unified%20Report.csv"
-            },
-            {
-                "type": "trackvia",
-                "view": "5000034146",
-                "name": "mpt"
-            }
-        ],
-        "script": "r-scripts/D4-CMMI-Readmissions.R",
-        "outputFile": "output/D4-CMMI-Readmissions.csv",
-        "output": {
-            "table": "5000004149",
-            "fields": "UniqueID,AdmitDate,VisitType,Facility",
-            "tableName": "Readmissions",
-            "appName": "CMMI"
-        }
-    },
-    {
-        "sources": [
-            {
                 "name": "acosta-ramon",
                 "url": "ftp://camdenhie.careevolution.com/Extract/Reports/Acosta%20Ramon.csv"
             },
@@ -178,6 +157,27 @@
             "fields": "HIE Import Link,PRA Creation Date",
             "tableName": "3 Perinatal Risk Assessment",
             "appName": "ACO Application"
+        }
+    },
+    {
+        "sources": [
+            {
+                "name": "unified",
+                "url": "ftp://camdenhie.careevolution.com/Extract/Reports/Unified%20Report.csv"
+            },
+            {
+                "type": "trackvia",
+                "view": "5000034146",
+                "name": "mpt"
+            }
+        ],
+        "script": "r-scripts/D4-CMMI-Readmissions.R",
+        "outputFile": "output/D4-CMMI-Readmissions.csv",
+        "output": {
+            "table": "5000004149",
+            "fields": "UniqueID,AdmitDate,VisitType,Facility",
+            "tableName": "Readmissions",
+            "appName": "CMMI"
         }
     }
 ]
