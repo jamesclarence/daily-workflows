@@ -89,11 +89,14 @@ function run() {
   casper.waitForUrl(/&action=complete$/, function importingFinished() {
     casper.capture('tmp/5.jpg');
 
-    var text = this.fetchText('#container-main')
+    var text = casper.fetchText('#container-main')
       .trim()
       .replace('Click to return to Table Overview page.', '');
 
-    this.echo(text);
+    casper.echo(text);
+
+    casper.exit(0);
+
   }, function importingTimedout() {
     setTimeout(run, timeout);
   }, 1000 * 60 * 30);
