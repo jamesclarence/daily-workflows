@@ -81,9 +81,9 @@ function run() {
   }, function importingTimedout() {
     casper.capture('tmp/error' + tableID + '.jpg');
     setTimeout(function() {
-      casper.die('Upload failed. Internal server error.', 1);
+      casper.die('Upload timed out. Check to see if the update finished.', 1);
     }, 0);
-  }, 1000 * 60 * 5);
+  }, 1000 * 60 * 10);
 
   // Wait until upload finishes
   casper.waitForUrl(/&action=complete$/, function importingFinished() {
