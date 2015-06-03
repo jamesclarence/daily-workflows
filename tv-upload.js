@@ -95,7 +95,9 @@ function run() {
 
     casper.echo(text);
 
-    casper.exit(0);
+    setTimeout(function() {
+      casper.exit(0);
+    }, 0);
 
   }, function importingTimedout() {
     setTimeout(run, timeout);
