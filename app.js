@@ -15,6 +15,7 @@ var queue = require('queue-async'),
     tasks = queue(1),
     emailConfig = {
       to: process.env.EMAIL_TO,
+      from: process.env.EMAIL_FROM,
       host: 'smtp.mandrillapp.com',
       username: process.env.EMAIL_USER,
       password: process.env.EMAIL_PASSWORD,
@@ -55,11 +56,11 @@ tasks.awaitAll(function(err, data) {
                                   'Success: ' + emailConfig.subject;
 
   var mailOptions = {
-    from: emailConfig.username,
+    from: emailConfig.from || emailConfig.username,
     to: emailConfig.to,
     subject: subject,
     attachments: images,
-    html: emailConfig.message + logs 
+    html: emailConfig.message + logs
   };
 
   mailer.sendMail(mailOptions, function(error, info) {
@@ -212,7 +213,7 @@ function runTask(config, nextTask) {
               'ftp://camdenhie.careevolution.com/CCHPProcessed/'
             ], { maxBuffer: 200 * 1024 * 1024 }),
             output = '';
-  
+
         child.stdout.setEncoding('utf8');
         child.stderr.setEncoding('utf8');
         child.stderr.on('data', function (data) { cb(data, null); });
@@ -229,9 +230,9 @@ function runTask(config, nextTask) {
               scriptName = config.script.split('/')[1].replace(/\.R$/, ''),
               out = '',
               err = ''
-        
+
           console.log('Uploading ' + scriptName + ' to table: ' + config.output.tableName);
-        
+
           child.stdout.setEncoding('utf8');
           child.stderr.setEncoding('utf8');
           child.stdout.on('data', function (data) {
