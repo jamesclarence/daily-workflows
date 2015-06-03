@@ -146,11 +146,6 @@
             {
                 "name": "pra",
                 "url": "ftp://camdenhie.careevolution.com/Extract/Reports/Perinatal%20Risk%20Assessments.csv"
-            },
-            {
-                "type": "trackvia",
-                "view": "5000040347",
-                "name": "pracaplist"
             }
         ],
         "script": "r-scripts/pra cap list.R",
@@ -164,11 +159,6 @@
     },
     {
         "sources": [
-            {
-                "type": "trackvia",
-                "view": "5000041245",
-                "name": "prampt"
-            }
         ],
         "script": "r-scripts/pra mpt.R",
         "outputFile": "output/PRA-MPT.csv",
