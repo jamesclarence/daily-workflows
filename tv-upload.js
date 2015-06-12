@@ -45,8 +45,8 @@ function run() {
   // Limit retries
   if (retries >= retriesMax) {
     setTimeout(function() {
-      casper.die('Timed out uploading to TrackVia. \
-        Tried ' + retriesMax + ' times. Is TrackVia available?', 1);
+      casper.die('Error: Timed out uploading to TrackVia. ' +
+        'Tried ' + retriesMax + ' times. Is TrackVia available?', 1);
     }, 0);
     return;
   }
@@ -69,6 +69,12 @@ function run() {
           });
 
       casper.fill('form#main', { matches: matches }, true);
+
+      // Test for upload error
+      casper.then(function() {
+        var error = casper.fetchText('.container_err_msg').trim();
+        if (error) setTimeout(function() { casper.die('Error: ' + error); }, 0);
+      });
 
       // If TrackVia doesn't redirect to waiting page after 10 seconds,
       // do it manually.
