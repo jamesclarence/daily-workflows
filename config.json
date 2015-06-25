@@ -42,6 +42,10 @@
                 "url": "ftp://camdenhie.careevolution.com/Extract/Reports/Cooper%20Ambulatory.csv"
             },
             {
+                "name": "camcare",
+                "url": "ftp://camdenhie.careevolution.com/Extract/Reports/CAMCare.csv"
+            },
+            {
                 "name": "cooper-family-med",
                 "url": "ftp://camdenhie.careevolution.com/Extract/Reports/Cooper%20Family%20Med.csv"
             },
