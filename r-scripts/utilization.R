@@ -3,6 +3,7 @@ library(reshape)
 
 #Reads in files
 AR      <-read.csv(paste("tmp/acosta-ramon", ".csv", sep=""),stringsAsFactors=FALSE)
+cam     <-read.csv(paste("tmp/camcare", ".csv", sep=""),stringsAsFactors=FALSE)
 Amb     <-read.csv(paste("tmp/cooper-ambulatory", ".csv", sep=""),stringsAsFactors=FALSE)
 Fam     <-read.csv(paste("tmp/cooper-family-med", ".csv", sep=""),stringsAsFactors=FALSE)
 Phys    <-read.csv(paste("tmp/cooper-physicians", ".csv", sep=""),stringsAsFactors=FALSE)
@@ -26,7 +27,7 @@ uhi$Source<-""
 uhi$Subscriber.ID<-ifelse(grepl("NIC", uhi$Subscriber.ID), uhi$Subscriber.ID, paste("NIC", uhi$Subscriber.ID, sep=""))
 
 #Appends all files
-aco <- rbind(Amb,AR,fairview,Fam,kylewill,Lourdes,luke,phope,Phys,reliance)
+aco <- rbind(Amb,AR,cam,fairview,Fam,kylewill,Lourdes,luke,phope,Phys,reliance)
 
 #Sorts columns alphabetically
 aco <- aco[,order(names(aco))]
