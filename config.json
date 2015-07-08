@@ -197,7 +197,7 @@
         "output": {
             "table": "5000002691",
             "fields": "Record Locator",
-            "tableName": "Triage Outcome",
+            "tableName": "Triage Outcome (For Horizon Dashboard)",
             "appName": "Patient Selection"
         }
     }
