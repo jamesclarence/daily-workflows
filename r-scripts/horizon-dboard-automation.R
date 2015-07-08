@@ -18,11 +18,12 @@ bad$HIE.Import.Link<-bad$HIEID
 bad<-reshape::rename(bad, c(HIE.Import.Link="HIE Import Link"))
 bad<-reshape::rename(bad, c(Record.Locator="Record Locator"))
 
+#Removes unnecessary columns
+bad$HIEID<-NULL
+
 #Identifies fields to export
-HorizonDashboardUpdate<-bad[,c("Record Locator",
-                               "HIE Import Link"
-                               )]
+#HorizonDashboardUpdate<-bad[,c("Record Locator","HIE Import Link")]
 
 #Exports file
-#write.csv(HorizonDashboardUpdate, paste(Sys.Date(), "-", file="Horizon-Dashboard-Update", ".csv", sep=""), row.names=FALSE)
-write.csv(HorizonDashboardUpdate, stdout(), row.names=FALSE)
+#write.csv(bad, paste(Sys.Date(), "-", file="Horizon-Dashboard-Update", ".csv", sep=""), row.names=FALSE)
+write.csv(bad, stdout(), row.names=FALSE)
