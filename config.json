@@ -183,5 +183,22 @@
             "tableName": "Readmissions",
             "appName": "CMMI"
         }
+    },
+    {
+        "sources": [
+            {
+                "type": "trackvia",
+                "view": "5000044418",
+                "name": "triageoutcome"
+            }
+        ],
+        "script": "r-scripts/horizon-dboard-automation.R",
+        "outputFile": "output/HorizonDashboardUpdate.csv",
+        "output": {
+            "table": "5000002691",
+            "fields": "Record Locator",
+            "tableName": "Triage Outcome",
+            "appName": "Patient Selection"
+        }
     }
 ]
