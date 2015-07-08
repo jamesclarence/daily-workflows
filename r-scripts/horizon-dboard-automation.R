@@ -16,7 +16,7 @@ bad$HIE.Import.Link<-bad$HIEID
 
 #Renames variables to match to table
 bad<-reshape::rename(bad, c(HIE.Import.Link="HIE Import Link"))
-bad<-reshape::rename(bad, c(Record.Locator="Record Locator"))
+bad<-reshape::rename(bad, c(ticketid="Record Locator"))
 
 #Removes unnecessary columns
 bad$HIEID<-NULL
