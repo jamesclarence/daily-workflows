@@ -189,7 +189,7 @@
             {
                 "type": "trackvia",
                 "view": "5000044418",
-                "name": "triageoutcome"
+                "name": "horizon_dashboard_update"
             }
         ],
         "script": "r-scripts/horizon-dboard-automation.R",
