@@ -4,7 +4,7 @@ suppressMessages(require(reshape))
 #path<-"Y:/Projects/Horizon Dashboard Automation"
 
 #Calls temporary file and names it 
-triageoutcome<-read.csv(paste("tmp/horizon_dashboard_update", ".csv", sep=""),as.is = !stringsAsFactors)
+triageoutcome<-read.csv(paste("tmp/horizon_dashboard_update", ".csv", sep=""),stringsAsFactors = FALSE)
 #triageoutcome<-read.csv(paste(path, "/", "horizon_dashboard_update_", Sys.Date(), "_1",  ".csv", sep=""),stringsAsFactors = FALSE)
 
 #Subsets data as matching and not matching HIE IDs
