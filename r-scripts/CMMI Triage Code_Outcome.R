@@ -85,6 +85,9 @@ CMITriage3<-reshape::rename(CMITriage3, c(FirstName="First Name"))
 #Identifies the columns for the two lists to be exported#
 TriageOutcome<-CMITriage3[,c("Last Name", "First Name", "Date of Birth", "PatientID2", "Gender", "HIEID")]
 
+#If there are genders other than F or M, it leaves it blank
+TriageOutcome$Gender[is.na(TriageOutcome$Gender)==TRUE] <- ""
+
 #Exports file
 # write.csv(TriageOutcome, (file=paste("TriageOutcome", format(Sys.Date(), "-%Y-%m-%d"), ".csv", sep="")), row.names=FALSE)
 write.csv(TriageOutcome, stdout(), row.names=FALSE)
