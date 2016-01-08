@@ -1,5 +1,5 @@
 #Attaches packages the script needs to run
-suppressWarnings(require(dplyr))
+suppressWarnings(suppressMessages(require(dplyr)))
 suppressWarnings(require(reshape))
 
 # Reads in files
@@ -70,7 +70,7 @@ acoUtilization <- rename(acoUtilization, c(Inp..6mo.="Inp6mo"))
 acoUtilization <- rename(acoUtilization, c(ED..6mo.="ED6mo"))
 
 # Filters acoUtilization to find ED Standards
-ed_standards <- filter(acoUtilization, ED6mo <= 4, PatientClass == "E")
+ed_standards <- filter(acoUtilization, ED6mo <= 4, acoUtilization$PatientClass == "E")
 
 # Adds an "import" column to ED Standards subset
 ed_standards$import <- "no"
