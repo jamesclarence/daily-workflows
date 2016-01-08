@@ -1,6 +1,6 @@
 #Attaches packages the script needs to run
-require(dplyr)
-require(reshape)
+suppressWarnings(require(dplyr))
+suppressWarnings(require(reshape))
 
 # Reads in files
 AR      <-read.csv(paste("tmp/acosta-ramon", ".csv", sep=""),stringsAsFactors=FALSE)
@@ -28,7 +28,7 @@ uhi$Source <- ""
 uhi$Subscriber.ID <- ifelse(grepl("NIC", uhi$Subscriber.ID), uhi$Subscriber.ID, paste("NIC", uhi$Subscriber.ID, sep=""))
 
 # Appends all files
-aco <- rbind(Amb,AR,cam,fairview,Fam,kylewill,Lourdes,luke,phope,Phys,reliance)
+aco <- rbind(Amb,AR,camcare,fairview,Fam,kylewill,Lourdes,luke,phope,Phys,reliance)
 
 # Sorts columns alphabetically
 aco <- aco[,order(names(aco))]
@@ -76,7 +76,7 @@ ed_standards <- filter(acoUtilization, ED6mo <= 4, PatientClass == "E")
 ed_standards$import <- "no"
 
 # Records not in the ED subset are "yes" in the import column
-acoUtilization <- left_join(acoUtilization, ed_standards) %>% mutate(import = ifelse(is.na(import), "yes", "no"))
+acoUtilization <- suppressMessages(left_join(acoUtilization, ed_standards)) %>% mutate(import = ifelse(is.na(import), "yes", "no"))
 
 # Gets ACO Utilizations where import is "yes" (and ED Standards are removed)
 acoUtilization <- filter(acoUtilization, import == "yes")
