@@ -35,7 +35,9 @@ sudo ln -s /usr/local/share/phantomjs/bin/phantomjs /usr/bin/phantomjs
 sudo npm install -g casperjs
 
 # R
-sudo apt-get install r-base -y
+./update-r.sh
+
+# R "reshape" package
 R
 install.packages("reshape")
 y
@@ -43,7 +45,14 @@ y
 q()
 n
 
+# R "dplyr" package
+R
+install.packages("dplyr")
+0
+q()
+n
+
 sudo apt-get install secure-delete
 
-# csv2xls, make sure its executable 
+# csv2xls, make sure its executable
 pip install --user csv2xls
