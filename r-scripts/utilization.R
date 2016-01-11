@@ -1,20 +1,24 @@
 #Attaches packages the script needs to run
 suppressWarnings(suppressMessages(require(dplyr)))
-suppressWarnings(require(reshape))
+suppressWarnings(suppressMessages(require(reshape)))
 
-# Reads in files
-AR      <-read.csv(paste("tmp/acosta-ramon", ".csv", sep=""),stringsAsFactors=FALSE)
-cam     <-read.csv(paste("tmp/camcare", ".csv", sep=""),stringsAsFactors=FALSE)
-Amb     <-read.csv(paste("tmp/cooper-ambulatory", ".csv", sep=""),stringsAsFactors=FALSE)
-Fam     <-read.csv(paste("tmp/cooper-family-med", ".csv", sep=""),stringsAsFactors=FALSE)
-Phys    <-read.csv(paste("tmp/cooper-physicians", ".csv", sep=""),stringsAsFactors=FALSE)
-fairview<-read.csv(paste("tmp/fairview", ".csv", sep=""),stringsAsFactors=FALSE)
-kylewill<-read.csv(paste("tmp/kyle-will", ".csv", sep=""),stringsAsFactors=FALSE)
-Lourdes <-read.csv(paste("tmp/lourdes", ".csv", sep=""), stringsAsFactors=FALSE)
-phope   <-read.csv(paste("tmp/project-hope", ".csv", sep=""),stringsAsFactors=FALSE)
-reliance<-read.csv(paste("tmp/reliance", ".csv", sep=""),stringsAsFactors=FALSE)
-luke    <-read.csv(paste("tmp/st-luke", ".csv", sep=""),stringsAsFactors=FALSE)
-uhi     <-read.csv(paste("tmp/uhi", ".csv", sep=""),stringsAsFactors=FALSE)
+#Sets the working directory#
+path<-setwd("Y:/Perry's Codes/")
+
+#Reads in files
+Lourdes<-read.csv(paste(path,"/", "lourdes-", Sys.Date(), ".csv", sep=""), stringsAsFactors=FALSE)
+Amb<-read.csv(paste(path, "/","cooper-ambulatory-", Sys.Date(), ".csv", sep=""),stringsAsFactors=FALSE)
+Fam<-read.csv(paste(path, "/","cooper-family-med-", Sys.Date(), ".csv", sep=""),stringsAsFactors=FALSE)
+Phys<-read.csv(paste(path,"/", "cooper-physicians-", Sys.Date(), ".csv", sep=""),stringsAsFactors=FALSE)
+AR<-read.csv(paste(path, "/","acosta-ramon-", Sys.Date(), ".csv", sep=""),stringsAsFactors=FALSE)
+fairview<-read.csv(paste(path, "/","fairview-", Sys.Date(), ".csv", sep=""),stringsAsFactors=FALSE)
+phope<-read.csv(paste(path,"/", "project-hope-", Sys.Date(), ".csv", sep=""),stringsAsFactors=FALSE)
+reliance<-read.csv(paste(path,"/", "reliance-", Sys.Date(), ".csv", sep=""),stringsAsFactors=FALSE)
+luke<-read.csv(paste(path,"/", "st-luke-", Sys.Date(), ".csv", sep=""),stringsAsFactors=FALSE)
+kylewill<-read.csv(paste(path,"/", "kyle-will-", Sys.Date(), ".csv", sep=""),stringsAsFactors=FALSE)
+camcare<-read.csv(paste(path,"/", "camcare-", Sys.Date(), ".csv", sep=""),stringsAsFactors=FALSE)
+uhi<-read.csv(paste(path,"/", "uhi-", Sys.Date(), ".csv", sep=""),stringsAsFactors=FALSE)
+tvutils<-read.csv(paste(path,"/", "daily-utilization-export_", Sys.Date(),"_1", ".csv", sep=""),stringsAsFactors=FALSE)
 
 # Rename fields in UHI file
 uhi <- rename(uhi, c(Last.Provider="Provider"))
@@ -28,7 +32,7 @@ uhi$Source <- ""
 uhi$Subscriber.ID <- ifelse(grepl("NIC", uhi$Subscriber.ID), uhi$Subscriber.ID, paste("NIC", uhi$Subscriber.ID, sep=""))
 
 # Appends all files
-aco <- rbind(Amb,AR,cam,fairview,Fam,kylewill,Lourdes,luke,phope,Phys,reliance)
+aco <- rbind(Amb,AR,camcare,fairview,Fam,kylewill,Lourdes,luke,phope,Phys,reliance)
 
 # Sorts columns alphabetically
 aco <- aco[,order(names(aco))]
@@ -50,16 +54,60 @@ aco2$DischargeDate <- gsub("\\(.*\\)","\\1", aco2$DischargeDate)
 aco2$CurrentlyAdmitted <- ifelse(aco2$CurrentlyAdmitted == aco2$DischargeDate, "", aco2$CurrentlyAdmitted)
 
 # Identifies the columns for the two lists to be exported
-acoUtilization <- data.frame(aco2[,c("Patient.ID",
-                                   "Admit.Date",
-                                   "Facility",
-                                   "Patient.Class",
-                                   "DischargeDate",
-                                   "Provider",
-                                   "Adm.Diagnoses",
-                                   "Inp..6mo.",
-                                   "ED..6mo.",
-                                   "CurrentlyAdmitted")])
+hieutils <- data.frame(aco2[,c("Patient.ID",
+                                     "Admit.Date",
+                                     "Facility",
+                                     "Patient.Class",
+                                     "DischargeDate",
+                                     "Provider",
+                                     "Adm.Diagnoses",
+                                     "Inp..6mo.",
+                                     "ED..6mo.",
+                                     "CurrentlyAdmitted")])
+
+
+#Function to convert TrackVia dates to R dates
+exceldate <- function(date){
+  
+  if (!is.character(date)) {
+    
+    return(date)
+    
+  } else {
+    
+    date<-gsub(" ", "/",date)
+    date<-gsub("Jan", "01",date)
+    date<-gsub("Feb", "02",date)
+    date<-gsub("Mar", "03",date)
+    date<-gsub("Apr", "04",date)
+    date<-gsub("May", "05",date)
+    date<-gsub("Jun", "06",date)
+    date<-gsub("Jul", "07",date)
+    date<-gsub("Aug", "08",date)
+    date<-gsub("Sep", "09",date)
+    date<-gsub("Oct", "10",date)
+    date<-gsub("Nov", "11",date)
+    date<-gsub("Dec", "12",date)
+    date<-as.Date(date, format="%m/%d/%Y")
+    
+    return(date)
+    
+  }
+}
+
+#Cleans date fields in the aco util file
+tvutils$AdmitDate<-exceldate(tvutils$AdmitDate)
+tvutils$DischargeDate<-exceldate(tvutils$DischargeDate)
+
+# Create ID field for utilizations in the import file
+hieutils$DischargeDate <- ifelse(hieutils$DischargeDate=="", "NA", hieutils$DischargeDate)
+hieutils$ID <- paste(hieutils$Patient.ID, hieutils$Admit.Date, hieutils$Facility, hieutils$Patient.Class, hieutils$DischargeDate, sep="-")
+
+# Create ID field for utilizations in the trackvia file
+tvutils$ID <- paste(tvutils$HIE.Import.Link, tvutils$AdmitDate, tvutils$Facility, tvutils$PatientClass, tvutils$DischargeDate, sep="-")
+
+# Subset records that are not in the acoutil file
+acoUtilization <- hieutils[!hieutils$ID %in% tvutils$ID,]
 
 # Renames fields to import
 acoUtilization <- rename(acoUtilization, c(Patient.ID="HIE Import Link"))
@@ -79,11 +127,14 @@ ed_standards$import <- "no"
 acoUtilization <- suppressMessages(left_join(acoUtilization, ed_standards)) %>% mutate(import = ifelse(is.na(import), "yes", "no"))
 
 # Gets ACO Utilizations where import is "yes" (and ED Standards are removed)
-acoUtilization <- filter(acoUtilization, import == "yes")
+acoUtilization <- subset(acoUtilization, acoUtilization$import == "yes")
 
-# Drops import column
-acoUtilization$import <- acoUtilization$import <- NULL
+# Drops unused columns
+acoUtilization$import <- NULL
+acoUtilization$ID <- NULL
+
+# Replaces NA with spaces
+acoUtilization$DischargeDate<-ifelse(acoUtilization$DischargeDate=="NA","", acoUtilization$DischargeDate)
 
 #Exports csv file
-#write.csv(acoUtilization, (file=paste("ACO-Utilizations", ".csv", sep="")), row.names=FALSE)
-write.csv(acoUtilization, stdout(), row.names=FALSE)
+write.csv(acoUtilization, (file=paste("ACO-Utilizations-", format(Sys.Date(), "%Y-%m-%d"), ".csv", sep="")), row.names=FALSE)
