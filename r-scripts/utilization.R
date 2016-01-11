@@ -1,6 +1,5 @@
 #Attaches packages the script needs to run
 suppressWarnings(suppressMessages(require(dplyr)))
-suppressWarnings(suppressMessages(require(reshape)))
 
 #Sets the working directory#
 path<-setwd("Y:/Perry's Codes/")
