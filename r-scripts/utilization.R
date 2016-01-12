@@ -108,12 +108,12 @@ tvutils$ID <- paste(tvutils$HIE.Import.Link, tvutils$AdmitDate, tvutils$Facility
 acoUtilization <- hieutils[!hieutils$ID %in% tvutils$ID,]
 
 # Renames fields to import
-acoUtilization <- reshape::rename(acoUtilization, c(Patient.ID=HIE Import Link))
-acoUtilization <- reshape::rename(acoUtilization, c(Admit.Date=AdmitDate))
-acoUtilization <- reshape::rename(acoUtilization, c(Patient.Class=PatientClass))
-acoUtilization <- reshape::rename(acoUtilization, c(Adm.Diagnoses=HistoricalDiagnosis))
-acoUtilization <- reshape::rename(acoUtilization, c(Inp..6mo.=Inp6mo))
-acoUtilization <- reshape::rename(acoUtilization, c(ED..6mo.=ED6mo))
+acoUtilization <- reshape::rename(acoUtilization, c(Patient.ID="HIE Import Link"))
+acoUtilization <- reshape::rename(acoUtilization, c(Admit.Date="AdmitDate"))
+acoUtilization <- reshape::rename(acoUtilization, c(Patient.Class="PatientClass"))
+acoUtilization <- reshape::rename(acoUtilization, c(Adm.Diagnoses="HistoricalDiagnosis"))
+acoUtilization <- reshape::rename(acoUtilization, c(Inp..6mo.="Inp6mo"))
+acoUtilization <- reshape::rename(acoUtilization, c(ED..6mo.="ED6mo"))
 
 # Filters acoUtilization to find ED Standards
 ed_standards <- filter(acoUtilization, ED6mo <= 4, acoUtilization$PatientClass == "E")
