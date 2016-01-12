@@ -1,4 +1,5 @@
 #Attaches packages the script needs to run
+suppressWarnings(suppressMessages(require(reshape)))
 suppressWarnings(suppressMessages(require(dplyr)))
 
 #Reads in files
@@ -18,7 +19,7 @@ uhi     <-read.csv(paste("tmp/uhi", ".csv", sep=""),stringsAsFactors=FALSE)
 tvutils <-read.csv(paste("tmp/tvutils", ".csv", sep=""),stringsAsFactors=FALSE)
 
 # Rename fields in UHI file
-uhi <- dplyr::rename(uhi, c("Last.Provider"="Provider"))
+uhi <- reshape::rename(uhi, c(Last.Provider="Provider"))
 
 # Deletes unused fields
 uhi$PCP.Name <- ""
@@ -107,12 +108,12 @@ tvutils$ID <- paste(tvutils$HIE.Import.Link, tvutils$AdmitDate, tvutils$Facility
 acoUtilization <- hieutils[!hieutils$ID %in% tvutils$ID,]
 
 # Renames fields to import
-acoUtilization <- dplyr::rename(acoUtilization, c("Patient.ID"="HIE Import Link"))
-acoUtilization <- dplyr::rename(acoUtilization, c("Admit.Date"="AdmitDate"))
-acoUtilization <- dplyr::rename(acoUtilization, c("Patient.Class"="PatientClass"))
-acoUtilization <- dplyr::rename(acoUtilization, c("Adm.Diagnoses"="HistoricalDiagnosis"))
-acoUtilization <- dplyr::rename(acoUtilization, c("Inp..6mo."="Inp6mo"))
-acoUtilization <- dplyr::rename(acoUtilization, c("ED..6mo."="ED6mo"))
+acoUtilization <- reshape::rename(acoUtilization, c(Patient.ID=HIE Import Link))
+acoUtilization <- reshape::rename(acoUtilization, c(Admit.Date=AdmitDate))
+acoUtilization <- reshape::rename(acoUtilization, c(Patient.Class=PatientClass))
+acoUtilization <- reshape::rename(acoUtilization, c(Adm.Diagnoses=HistoricalDiagnosis))
+acoUtilization <- reshape::rename(acoUtilization, c(Inp..6mo.=Inp6mo))
+acoUtilization <- reshape::rename(acoUtilization, c(ED..6mo.=ED6mo))
 
 # Filters acoUtilization to find ED Standards
 ed_standards <- filter(acoUtilization, ED6mo <= 4, acoUtilization$PatientClass == "E")
