@@ -1,9 +1,6 @@
 #Attaches packages the script needs to run
 suppressWarnings(suppressMessages(require(dplyr)))
 
-#Sets the working directory#
-path<-setwd("Y:/Perry's Codes/")
-
 #Reads in files
 # Reads in files
 AR      <-read.csv(paste("tmp/acosta-ramon", ".csv", sep=""),stringsAsFactors=FALSE)
