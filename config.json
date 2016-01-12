@@ -1,39 +1,13 @@
 [
+
     {
         "sources": [
             {
-                "name": "Admitted Past Month (High Use)",
-                "url": "ftp://camdenhie.careevolution.com/Extract/Reports/Admitted%20Past%20Month%20(High%20Use).csv"
-            }
-        ],
-        "script": "r-scripts/CMMI Triage Code_Outcome.R",
-        "outputFile": "output/CMMI Triage Code_Outcome.csv",
-        "output": {
-            "table": "5000002691",
-            "fields": "PatientID2",
-            "tableName": "Triage Outcome",
-            "appName": "Patient Selection"
-        }
-    },
-    {
-        "sources": [
-            {
-                "name": "Admitted Past Month (High Use)",
-                "url": "ftp://camdenhie.careevolution.com/Extract/Reports/Admitted%20Past%20Month%20(High%20Use).csv"
-            }
-        ],
-        "script": "r-scripts/Triage Code_Triage Review.R",
-        "outputFile": "output/Triage Code_Triage Review.csv",
-        "output": {
-            "table": "5000002690",
-            "fields": "PatientID,Admit Date,Facility",
-            "tableName": "Triage Review Table",
-            "appName": "Patient Selection"
-        }
-    },
-    {
-        "sources": [
-            {
+		"type": "trackvia",
+		"view": "5000053704",
+		"name": "tvutils"
+		},
+		{
                 "name": "acosta-ramon",
                 "url": "ftp://camdenhie.careevolution.com/Extract/Reports/Acosta%20Ramon.csv"
             },
@@ -80,46 +54,7 @@
             {
                 "name": "uhi",
                 "url": "ftp://camdenhie.careevolution.com/Extract/Reports/Cooper%20UHI.csv"
-            },
-            {
-                "type": "trackvia",
-                "view": "5000040347",
-                "name": "caplist"
             }
-        ],
-        "script": "r-scripts/cap list.R",
-        "outputFile": "output/ACO-Cap.csv",
-        "output": {
-            "table": "5000002972",
-            "fields": "SUBSCRIBER_ID",
-            "tableName": "1 United Capitation List",
-            "appName": "ACO Application"
-        }
-    },
-    {
-        "sources": [
-            {
-                "type": "trackvia",
-                "view": "5000041245",
-                "name": "acompt"
-            }
-        ],
-        "script": "r-scripts/mpt.R",
-        "outputFile": "output/ACO-MPT.csv",
-        "output": {
-            "table": "5000002973",
-            "fields": "HIE Import Link",
-            "tableName": "2A United CCHP Master Patient Table",
-            "appName": "ACO Application"
-        }
-    },
-    {
-        "sources": [
-            {
-		"type": "trackvia",
-		"view": "5000053704",
-		"name": "tvutils"
-		}
         ],
         "script": "r-scripts/utilization.R",
         "outputFile": "output/ACO-Utilizations.csv",
@@ -129,83 +64,6 @@
             "tableName": "3 United CCHP Utilization Tracker",
             "appName": "ACO Application"
         }
-    },
-    {
-        "sources": [
-            {
-                "name": "pra",
-                "url": "ftp://camdenhie.careevolution.com/Extract/Reports/Perinatal%20Risk%20Assessments.csv"
-            }
-        ],
-        "script": "r-scripts/pra cap list.R",
-        "outputFile": "output/PRA-Cap.csv",
-        "output": {
-            "table": "5000002972",
-            "fields": "SUBSCRIBER_ID",
-            "tableName": "1 United Capitation List",
-            "appName": "ACO Application"
-        }
-    },
-    {
-        "sources": [
-        ],
-        "script": "r-scripts/pra mpt.R",
-        "outputFile": "output/PRA-MPT.csv",
-        "output": {
-            "table": "5000002973",
-            "fields": "HIE Import Link",
-            "tableName": "2A United CCHP Master Patient Table",
-            "appName": "ACO Application"
-        }
-    },
-    {
-        "sources": [
-        ],
-        "script": "r-scripts/pra.R",
-        "outputFile": "output/PRA-Table.csv",
-        "output": {
-            "table": "5000005171",
-            "fields": "HIE Import Link,PRA Creation Date",
-            "tableName": "3 Perinatal Risk Assessment",
-            "appName": "ACO Application"
-        }
-    },
-    {
-        "sources": [
-            {
-                "name": "unified",
-                "url": "ftp://camdenhie.careevolution.com/Extract/Reports/Unified%20Report.csv"
-            },
-            {
-                "type": "trackvia",
-                "view": "5000034146",
-                "name": "mpt"
-            }
-        ],
-        "script": "r-scripts/D4-CMMI-Readmissions.R",
-        "outputFile": "output/D4-CMMI-Readmissions.csv",
-        "output": {
-            "table": "5000004149",
-            "fields": "UniqueID,AdmitDate,VisitType,Facility",
-            "tableName": "Readmissions",
-            "appName": "CMMI"
-        }
-    },
-    {
-        "sources": [
-            {
-                "type": "trackvia",
-                "view": "5000044418",
-                "name": "horizon_dashboard_update"
-            }
-        ],
-        "script": "r-scripts/horizon-dboard-automation.R",
-        "outputFile": "output/HorizonDashboardUpdate.csv",
-        "output": {
-            "table": "5000002691",
-            "fields": "Record Locator",
-            "tableName": "Triage Outcome (For Horizon Dashboard)",
-            "appName": "Patient Selection"
-        }
     }
+   
 ]
