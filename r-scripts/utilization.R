@@ -52,16 +52,18 @@ aco2$DischargeDate <- gsub("\\(.*\\)","\\1", aco2$DischargeDate)
 aco2$CurrentlyAdmitted <- ifelse(aco2$CurrentlyAdmitted == aco2$DischargeDate, "", aco2$CurrentlyAdmitted)
 
 # Identifies the columns for the two lists to be exported
-hieutils <- data.frame(aco2[,c("Patient.ID",
-                                     "Admit.Date",
-                                     "Facility",
-                                     "Patient.Class",
-                                     "DischargeDate",
-                                     "Provider",
-                                     "Adm.Diagnoses",
-                                     "Inp..6mo.",
-                                     "ED..6mo.",
-                                     "CurrentlyAdmitted")])
+hieutils <- data.frame(aco2[,c(
+                                "Patient.ID",
+                                 "Admit.Date",
+                                 "Facility",
+                                 "Patient.Class",
+                                 "DischargeDate",
+                                 "Provider",
+                                 "Adm.Diagnoses",
+                                 "Inp..6mo.",
+                                 "ED..6mo.",
+                                 "CurrentlyAdmitted"
+                                 )])
 
 
 #Function to convert TrackVia dates to R dates
@@ -97,12 +99,25 @@ exceldate <- function(date){
 tvutils$AdmitDate<-exceldate(tvutils$AdmitDate)
 tvutils$DischargeDate<-exceldate(tvutils$DischargeDate)
 
+#Formats dates in hieutils
+hieutils$Admit.Date <- as.Date(hieutils$Admit.Date, format="%m/%d/%Y")
+hieutils$DischargeDate <- as.Date(hieutils$DischargeDate, format="%m/%d/%Y")
+
 # Create ID field for utilizations in the import file
-hieutils$DischargeDate <- ifelse(hieutils$DischargeDate=="", "NA", hieutils$DischargeDate)
-hieutils$ID <- paste(hieutils$Patient.ID, hieutils$Admit.Date, hieutils$Facility, hieutils$Patient.Class, hieutils$DischargeDate, sep="-")
+hieutils$ID <- paste(
+  hieutils$HIE.Import.Link, 
+ hieutils$AdmitDate, 
+  hieutils$Facility, 
+  hieutils$PatientClass, 
+  hieutils$DischargeDate, sep="-")
 
 # Create ID field for utilizations in the trackvia file
-tvutils$ID <- paste(tvutils$HIE.Import.Link, tvutils$AdmitDate, tvutils$Facility, tvutils$PatientClass, tvutils$DischargeDate, sep="-")
+tvutils$ID <- paste(
+  tvutils$HIE.Import.Link, 
+  tvutils$AdmitDate, 
+  tvutils$Facility, 
+  tvutils$PatientClass, 
+  tvutils$DischargeDate, sep="-")
 
 # Subset records that are not in the acoutil file
 acoUtilization <- hieutils[!hieutils$ID %in% tvutils$ID,]
