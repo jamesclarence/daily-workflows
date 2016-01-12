@@ -48,7 +48,14 @@ n
 # R "dplyr" package
 R
 install.packages("dplyr")
-0
+1
+q()
+n
+
+# R "data.table" package
+R
+install.packages("data.table")
+1
 q()
 n
 
