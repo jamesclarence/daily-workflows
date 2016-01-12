@@ -30,7 +30,7 @@ uhi$Source <- ""
 uhi$Subscriber.ID <- ifelse(grepl("NIC", uhi$Subscriber.ID), uhi$Subscriber.ID, paste("NIC", uhi$Subscriber.ID, sep=""))
 
 # Appends all files
-aco <- rbind(Amb,AR,camcare,fairview,Fam,kylewill,Lourdes,luke,phope,Phys,reliance)
+aco <- rbind(Amb,AR,cam,fairview,Fam,kylewill,Lourdes,luke,phope,Phys,reliance)
 
 # Sorts columns alphabetically
 aco <- aco[,order(names(aco))]
