@@ -53,33 +53,35 @@ aco2$CurrentlyAdmitted <- ifelse(aco2$CurrentlyAdmitted == aco2$DischargeDate, "
 
 # Identifies the columns for the two lists to be exported
 hieutils <- data.frame(aco2[,c(
-                                "Patient.ID",
-                                 "Admit.Date",
-                                 "Facility",
-                                 "Patient.Class",
-                                 "DischargeDate",
-                                 "Provider",
-                                 "Adm.Diagnoses",
-                                 "Inp..6mo.",
-                                 "ED..6mo.",
-                                 "CurrentlyAdmitted"
-                                 )])
+  "Patient.ID",
+  "Admit.Date",
+  "Facility",
+  "Patient.Class",
+  "DischargeDate",
+  "Provider",
+  "Adm.Diagnoses",
+  "Inp..6mo.",
+  "ED..6mo.",
+  "CurrentlyAdmitted"
+)])
 
+#Cleans date fields in the tvutils file by removing the time
+tvutils$AdmitDate<-gsub("T12:00:00-0700", "",tvutils$AdmitDate)
+tvutils$DischargeDate<-gsub("T12:00:00-0700", "",tvutils$DischargeDate)
+tvutils$DischargeDate<-gsub("-0001-11-30T00:00:00-0700", "" ,tvutils$DischargeDate)
 
-#Cleans date fields in the aco util file
-tvutils$AdmitDate<-exceldate(tvutils$AdmitDate)
-tvutils$DischargeDate<-exceldate(tvutils$DischargeDate)
+#Replaces blanks with NAs in the tvutils DischargeDate field
+tvutils$DischargeDate[tvutils$DischargeDate==""]  <- NA 
 
-#Formats dates in hieutils
-hieutils$Admit.Date <- as.Date(hieutils$Admit.Date, format="%m/%d/%Y")
-hieutils$DischargeDate <- as.Date(hieutils$DischargeDate, format="%m/%d/%Y")
+#Replaces blanks with NA values in the hieutils DischargeDate field
+hieutils$DischargeDate[hieutils$DischargeDate==""]  <- NA 
 
 # Create ID field for utilizations in the import file
 hieutils$ID <- paste(
-  hieutils$HIE.Import.Link, 
- hieutils$AdmitDate, 
+  hieutils$Patient.ID, 
+  hieutils$Admit.Date, 
   hieutils$Facility, 
-  hieutils$PatientClass, 
+  hieutils$Patient.Class, 
   hieutils$DischargeDate, sep="-")
 
 # Create ID field for utilizations in the trackvia file
@@ -119,7 +121,8 @@ acoUtilization$ID <- NULL
 
 # Replaces NA with spaces
 acoUtilization$DischargeDate <- as.character(acoUtilization$DischargeDate)
-acoUtilization$DischargeDate[is.na(acoUtilization$DischargeDate)] <- " "
+acoUtilization$DischargeDate[is.na(acoUtilization$DischargeDate)] <- ""
+
 #Exports csv file
 #write.csv(acoUtilization, (file=paste("ACO-Utilizations", ".csv", sep="")), row.names=FALSE)
 write.csv(acoUtilization, stdout(), row.names=FALSE)
