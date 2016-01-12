@@ -1,39 +1,8 @@
 [
+
     {
         "sources": [
-            {
-                "name": "Admitted Past Month (High Use)",
-                "url": "ftp://camdenhie.careevolution.com/Extract/Reports/Admitted%20Past%20Month%20(High%20Use).csv"
-            }
-        ],
-        "script": "r-scripts/CMMI Triage Code_Outcome.R",
-        "outputFile": "output/CMMI Triage Code_Outcome.csv",
-        "output": {
-            "table": "5000002691",
-            "fields": "PatientID2",
-            "tableName": "Triage Outcome",
-            "appName": "Patient Selection"
-        }
-    },
-    {
-        "sources": [
-            {
-                "name": "Admitted Past Month (High Use)",
-                "url": "ftp://camdenhie.careevolution.com/Extract/Reports/Admitted%20Past%20Month%20(High%20Use).csv"
-            }
-        ],
-        "script": "r-scripts/Triage Code_Triage Review.R",
-        "outputFile": "output/Triage Code_Triage Review.csv",
-        "output": {
-            "table": "5000002690",
-            "fields": "PatientID,Admit Date,Facility",
-            "tableName": "Triage Review Table",
-            "appName": "Patient Selection"
-        }
-    },
-    {
-        "sources": [
-            {
+        	            {
                 "name": "acosta-ramon",
                 "url": "ftp://camdenhie.careevolution.com/Extract/Reports/Acosta%20Ramon.csv"
             },
@@ -81,40 +50,6 @@
                 "name": "uhi",
                 "url": "ftp://camdenhie.careevolution.com/Extract/Reports/Cooper%20UHI.csv"
             },
-            {
-                "type": "trackvia",
-                "view": "5000040347",
-                "name": "caplist"
-            }
-        ],
-        "script": "r-scripts/cap list.R",
-        "outputFile": "output/ACO-Cap.csv",
-        "output": {
-            "table": "5000002972",
-            "fields": "SUBSCRIBER_ID",
-            "tableName": "1 United Capitation List",
-            "appName": "ACO Application"
-        }
-    },
-    {
-        "sources": [
-            {
-                "type": "trackvia",
-                "view": "5000041245",
-                "name": "acompt"
-            }
-        ],
-        "script": "r-scripts/mpt.R",
-        "outputFile": "output/ACO-MPT.csv",
-        "output": {
-            "table": "5000002973",
-            "fields": "HIE Import Link",
-            "tableName": "2A United CCHP Master Patient Table",
-            "appName": "ACO Application"
-        }
-    },
-    {
-        "sources": [
             {
 		"type": "trackvia",
 		"view": "5000053704",
