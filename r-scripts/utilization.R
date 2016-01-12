@@ -147,8 +147,8 @@ acoUtilization$import <- NULL
 acoUtilization$ID <- NULL
 
 # Replaces NA with spaces
-acoUtilization$DischargeDate<-ifelse(acoUtilization$DischargeDate=="NA","", acoUtilization$DischargeDate)
-
+acoUtilization$DischargeDate <- as.character(acoUtilization$DischargeDate)
+acoUtilization$DischargeDate[is.na(acoUtilization$DischargeDate)] <- " "
 #Exports csv file
 #write.csv(acoUtilization, (file=paste("ACO-Utilizations", ".csv", sep="")), row.names=FALSE)
 write.csv(acoUtilization, stdout(), row.names=FALSE)
