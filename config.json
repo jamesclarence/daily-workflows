@@ -125,7 +125,7 @@
         "outputFile": "output/ACO-Utilizations.csv",
         "output": {
             "table": "5000003083",
-            "fields": "HIE Import Link,AdmitDate,Facility,PatientClass",
+            "fields": "HIEID,AdmitDate,Facility,PatientClass",
             "tableName": "3 United CCHP Utilization Tracker",
             "appName": "ACO Application"
         }
@@ -165,7 +165,7 @@
         "outputFile": "output/PRA-Table.csv",
         "output": {
             "table": "5000005171",
-            "fields": "HIE Import Link,PRA Creation Date",
+            "fields": "HIEID,PRA Creation Date",
             "tableName": "3 Perinatal Risk Assessment",
             "appName": "ACO Application"
         }
