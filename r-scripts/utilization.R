@@ -86,7 +86,7 @@ hieutils$ID <- paste(
 
 # Create ID field for utilizations in the trackvia file
 tvutils$ID <- paste(
-  tvutils$HIE.Import.Link, 
+  tvutils$HIEID, 
   tvutils$AdmitDate, 
   tvutils$Facility, 
   tvutils$PatientClass, 
