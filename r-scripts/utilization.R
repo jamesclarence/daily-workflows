@@ -96,7 +96,7 @@ tvutils$ID <- paste(
 acoUtilization <- hieutils[!hieutils$ID %in% tvutils$ID,]
 
 # Renames fields to import
-acoUtilization <- reshape::rename(acoUtilization, c(Patient.ID="HIE Import Link"))
+acoUtilization <- reshape::rename(acoUtilization, c(Patient.ID="HIEID"))
 acoUtilization <- reshape::rename(acoUtilization, c(Admit.Date="AdmitDate"))
 acoUtilization <- reshape::rename(acoUtilization, c(Patient.Class="PatientClass"))
 acoUtilization <- reshape::rename(acoUtilization, c(Adm.Diagnoses="HistoricalDiagnosis"))
