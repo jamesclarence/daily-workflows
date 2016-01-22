@@ -99,23 +99,6 @@
     {
         "sources": [
             {
-                "type": "trackvia",
-                "view": "5000041245",
-                "name": "acompt"
-            }
-        ],
-        "script": "r-scripts/mpt.R",
-        "outputFile": "output/ACO-MPT.csv",
-        "output": {
-            "table": "5000002973",
-            "fields": "HIE Import Link",
-            "tableName": "2A United CCHP Master Patient Table",
-            "appName": "ACO Application"
-        }
-    },
-    {
-        "sources": [
-            {
 		"type": "trackvia",
 		"view": "5000053704",
 		"name": "tvutils"
@@ -143,18 +126,6 @@
             "table": "5000002972",
             "fields": "SUBSCRIBER_ID",
             "tableName": "1 United Capitation List",
-            "appName": "ACO Application"
-        }
-    },
-    {
-        "sources": [
-        ],
-        "script": "r-scripts/pra mpt.R",
-        "outputFile": "output/PRA-MPT.csv",
-        "output": {
-            "table": "5000002973",
-            "fields": "HIE Import Link",
-            "tableName": "2A United CCHP Master Patient Table",
             "appName": "ACO Application"
         }
     },
