@@ -29,6 +29,9 @@ uhi$Source <- ""
 # Adds "NIC" to the uhi Subscriber ID if it's not already there 
 uhi$Subscriber.ID <- ifelse(grepl("NIC", uhi$Subscriber.ID), uhi$Subscriber.ID, paste("NIC", uhi$Subscriber.ID, sep=""))
 
+# Subsets camcare file to only include Horizon data
+cam<-subset(cam, Source=="Horizon")
+
 # Appends all files
 aco <- rbind(Amb,AR,cam,fairview,Fam,kylewill,Lourdes,luke,phope,Phys,reliance)
 
