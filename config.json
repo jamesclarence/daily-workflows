@@ -7,8 +7,8 @@
             },
             {
                 "type": "trackvia",
-                "view": "5000034146",
-                "name": "mpt"
+                "view": "5000005977",
+                "name": "daily-suboxone-export"
             }
         ],
         "script": "r-scripts/D4-CMMI-Readmissions.R",
