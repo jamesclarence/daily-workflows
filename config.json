@@ -8,7 +8,7 @@
             {
                 "type": "trackvia",
                 "view": "5000000846",
-                "name": "daily-suboxone-export"
+                "name": "suboxone"
             }
         ],
         "script": "r-scripts/D4-CMMI-Readmissions.R",
