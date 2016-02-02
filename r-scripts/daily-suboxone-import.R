@@ -2,11 +2,11 @@
 suppressMessages(require(reshape))
 
 # Sets working directory
-wd<-"Y:/Data Share Daily/daily-suboxone-import"
+#wd<-"Y:/Data Share Daily/daily-suboxone-import"
 
 # Reads in files
-unified<-read.csv(paste(wd, "/", "unified.csv", sep=""))
-clinicdata<-read.csv(paste(wd, "/", "daily-suboxone-export_", Sys.Date(), "_1", ".csv", sep=""))
+unified<-read.csv(paste("tmp/unified", ".csv", sep=""))
+clinicdata<-read.csv(paste("tmp/clinicdata", ".csv", sep=""))
 
 # Splits Name field in unified report
 unified$LastName = as.character(lapply(strsplit(as.character(unified$Name), split=", "), "[", 1))
@@ -106,4 +106,5 @@ suboxoneutils[is.na(suboxoneutils)] <- ""
 suboxoneutils$Payer[suboxoneutils$Payer=="CAMCare"] <- "UNITED"
 
 # Exports file
-write.csv(suboxoneutils, file="suboxone-utilizations.csv", row.names=FALSE)
+#write.csv(suboxoneutils, file="suboxone-utilizations.csv", row.names=FALSE)
+write.csv(suboxoneutils, stdout(), row.names=FALSE)
