@@ -12,39 +12,10 @@ clinicdata<-read.csv(paste("tmp/clinicdata", ".csv", sep=""))
 unified$LastName = as.character(lapply(strsplit(as.character(unified$Name), split=", "), "[", 1))
 unified$FirstName = as.character(lapply(strsplit(as.character(unified$Name), split=", "), "[", 2))
 
-# Function to convert TrackVia dates to universal date format
-exceldate <- function(date){
-  
-  if (!is.factor(date)) {
-    
-    return(date)
-    
-  } else {
-    
-    date<-gsub(" ", "/",date)
-    date<-gsub("Jan", "01",date)
-    date<-gsub("Feb", "02",date)
-    date<-gsub("Mar", "03",date)
-    date<-gsub("Apr", "04",date)
-    date<-gsub("May", "05",date)
-    date<-gsub("Jun", "06",date)
-    date<-gsub("Jul", "07",date)
-    date<-gsub("Aug", "08",date)
-    date<-gsub("Sep", "09",date)
-    date<-gsub("Oct", "10",date)
-    date<-gsub("Nov", "11",date)
-    date<-gsub("Dec", "12",date)
-    date<-as.Date(date, format="%m/%d/%Y")
-    
-    return(date)
-    
-  }
-}
-
-
-# Cleans Excel dates in clinicdata file
-clinicdata$dob<-exceldate(clinicdata$Patient.DOB)
-clinicdata$Patient.DOB<-NULL
+# Cleans date fields in the clinicdata file by removing the time
+clinicdata$Patient.DOB<-gsub("T12:00:00-0700", "",clinicdata$Patient.DOB)
+clinicdata$Patient.DOB<-gsub("T12:00:00-0600", "" ,clinicdata$Patient.DOB)
+clinicdata$Patient.DOB<-gsub("-0001-11-30T00:00:00-0700", "" ,clinicdata$Patient.DOB)
 
 # Cleans unified report dates
 unified$dob2<-as.Date(unified$DOB, format="%m/%d/%Y")
@@ -58,7 +29,7 @@ clinicdata$Patient.Last.Name<-clinicdata$Patient.Last.Name
 
 # Creates ID in both files
 unified$ID<-paste(unified$FirstName,unified$LastName,unified$dob2, sep="")
-clinicdata$ID<-paste(clinicdata$Patient.First.Name, clinicdata$Patient.Last.Name, clinicdata$dob, sep="")
+clinicdata$ID<-paste(clinicdata$Patient.First.Name, clinicdata$Patient.Last.Name, clinicdata$Patient.DOB, sep="")
 
 # Subset records that are not in the acoutil file
 suboxoneutils <- unified[unified$ID %in% clinicdata$ID,]
@@ -66,7 +37,7 @@ suboxoneutils <- unified[unified$ID %in% clinicdata$ID,]
 # Looks up Record Locator value for utilizations
 suboxoneutils <- (merge(suboxoneutils, clinicdata, by.x = "ID", by.y = "ID", all.x = TRUE))
 
-# Creates the name fields that will comprise the first part of the PatientID#
+# Creates the name fields that will comprise the first part of the PatientID
 suboxoneutils$FN<-substr(suboxoneutils$FirstName, 1, 2)
 suboxoneutils$LN<-substr(suboxoneutils$LastName, 1, 3)
 
