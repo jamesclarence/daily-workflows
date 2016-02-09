@@ -21,7 +21,7 @@ pra5<-pra4[,c("HIE.ID",
               "PRA.PATID")]
 
 #Renames fields
-pra5<-reshape::rename(pra5, c(HIE.ID="HIE Import Link"))
+pra5<-reshape::rename(pra5, c(HIE.ID="HIEID"))
 pra5<-reshape::rename(pra5, c(PRA.Creation.Date="PRA Creation Date"))
 pra5<-reshape::rename(pra5, c(PRA.Facility.Created="PRA Facility Created"))
 pra5<-reshape::rename(pra5, c(Most.Recent.Update.Date="Most Recent Update Date"))

@@ -9,7 +9,7 @@
     "comma-separated-values": "^3.6.1",
     "nodemailer": "^1.3.0",
     "queue-async": "^1.0.7",
-    "trackvia": "dhcole/node-trackvia",
+    "trackvia": "git+https://github.com/dhcole/node-trackvia.git",
     "underscore": "^1.7.0"
   }
 }

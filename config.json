@@ -99,28 +99,16 @@
     {
         "sources": [
             {
-                "type": "trackvia",
-                "view": "5000041245",
-                "name": "acompt"
-            }
-        ],
-        "script": "r-scripts/mpt.R",
-        "outputFile": "output/ACO-MPT.csv",
-        "output": {
-            "table": "5000002973",
-            "fields": "HIE Import Link",
-            "tableName": "2A United CCHP Master Patient Table",
-            "appName": "ACO Application"
-        }
-    },
-    {
-        "sources": [
+		"type": "trackvia",
+		"view": "5000053704",
+		"name": "tvutils"
+		}
         ],
         "script": "r-scripts/utilization.R",
         "outputFile": "output/ACO-Utilizations.csv",
         "output": {
             "table": "5000003083",
-            "fields": "HIE Import Link,AdmitDate,Facility,PatientClass",
+            "fields": "HIEID,AdmitDate,Facility,PatientClass",
             "tableName": "3 United CCHP Utilization Tracker",
             "appName": "ACO Application"
         }
@@ -144,23 +132,11 @@
     {
         "sources": [
         ],
-        "script": "r-scripts/pra mpt.R",
-        "outputFile": "output/PRA-MPT.csv",
-        "output": {
-            "table": "5000002973",
-            "fields": "HIE Import Link",
-            "tableName": "2A United CCHP Master Patient Table",
-            "appName": "ACO Application"
-        }
-    },
-    {
-        "sources": [
-        ],
         "script": "r-scripts/pra.R",
         "outputFile": "output/PRA-Table.csv",
         "output": {
             "table": "5000005171",
-            "fields": "HIE Import Link,PRA Creation Date",
+            "fields": "HIEID,PRA Creation Date",
             "tableName": "3 Perinatal Risk Assessment",
             "appName": "ACO Application"
         }
@@ -184,6 +160,23 @@
             "fields": "UniqueID,AdmitDate,VisitType,Facility",
             "tableName": "Readmissions",
             "appName": "CMMI"
+        }
+    },
+    {
+        "sources": [
+            {
+                "type": "trackvia",
+                "view": "5000054803",
+                "name": "clinicdata"
+            }
+        ],
+        "script": "r-scripts/daily-suboxone-import.R",
+        "outputFile": "output/suboxoneutils.csv",
+        "output": {
+            "table": "5000006372",
+            "fields": "UniqueID,AdmitDate,VisitType,Facility",
+            "tableName": "Utilizations",
+            "appName": "UHI Suboxone Clinic"
         }
     },
     {
