@@ -70,6 +70,9 @@ suboxoneutils<-reshape::rename(suboxoneutils, c(ED..6mo.="ED6mo"))
 suboxoneutils<-reshape::rename(suboxoneutils, c(ACO="Payer"))
 suboxoneutils<-reshape::rename(suboxoneutils, c(ACO.Practice="Practice"))
 
+# Replaces DischargeDate with blanks if patient is still admitted
+suboxoneutils$DischargeDate <- gsub(pattern = "\\(|\\)||Day [1-9]", replacement = "", x = suboxoneutils$DischargeDate)
+
 # Replaces NA's with blanks
 suboxoneutils[is.na(suboxoneutils)] <- ""
 
