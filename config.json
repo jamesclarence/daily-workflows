@@ -179,21 +179,4 @@
             "appName": "UHI Suboxone Clinic"
         }
     },
-    {
-        "sources": [
-            {
-                "type": "trackvia",
-                "view": "5000044418",
-                "name": "horizon_dashboard_update"
-            }
-        ],
-        "script": "r-scripts/horizon-dboard-automation.R",
-        "outputFile": "output/HorizonDashboardUpdate.csv",
-        "output": {
-            "table": "5000002691",
-            "fields": "Record Locator",
-            "tableName": "Triage Outcome (For Horizon Dashboard)",
-            "appName": "Patient Selection"
-        }
-    }
 ]
