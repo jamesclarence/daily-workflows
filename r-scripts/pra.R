@@ -9,6 +9,12 @@ pra2<-subset(pra,Subscriber.ID!="" )
 pra3<-subset(pra2,PRA.Creation.Date!="" )
 pra4<-subset(pra3,!grepl("NIC", pra3$Subscriber.ID))
 
+#Remove "U" from string to match TrackVia Subscriber IDs
+pra4$Subscriber.ID<-gsub("U", "", pra4$Subscriber.ID)
+
+#Keeps only those that have a corresponding Subscriber ID
+pra4<-subset(pra4, (pra4$Subscriber.ID %in% caplist$SUBSCRIBER_ID))
+
 #Convert PRA PATID values to lower
 pra4$PRA.PATID<-tolower(pra4$PRA.PATID)
 
