@@ -10,8 +10,14 @@ pra2<-subset(pra,Subscriber.ID!="" )
 pra3<-subset(pra2,PRA.Creation.Date!="" )
 pra4<-subset(pra3,!grepl("NIC", pra3$Subscriber.ID))
 
+#Remove "U" from string to match TrackVia Subscriber IDs
+pra4$Subscriber.ID<-gsub("U", "", pra4P$Subscriber.ID)
+
 #Identifies missing HIE Import Link values
 pra4<-subset(pra4, !(pra4$HIE.ID %in% caplist$Patient.ID.HIE))
+
+#Keeps only those that have a corresponding Subscriber ID
+pra4<-subset(pra4, (pra4$Subscriber.ID %in% caplist$SUBSCRIBER_ID))
 
 #Identifies fields for export
 praCAP<-pra4[,c("Subscriber.ID", "HIE.ID")]
@@ -19,9 +25,6 @@ praCAP<-pra4[,c("Subscriber.ID", "HIE.ID")]
 #Renames fields
 praCAP<-reshape::rename(praCAP, c(Subscriber.ID="SUBSCRIBER_ID"))
 praCAP<-reshape::rename(praCAP, c(HIE.ID="Patient ID HIE"))
-
-#Remove "U" from string to match TrackVia Subscriber IDs
-praCAP$SUBSCRIBER_ID<-gsub("U", "", praCAP$SUBSCRIBER_ID)
 
 #Exports csv files
 #write.csv(praCAP, (file=paste ("PRA-Cap", ".csv", sep="")), row.names=FALSE)
