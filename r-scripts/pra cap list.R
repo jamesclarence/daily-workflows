@@ -20,6 +20,9 @@ praCAP<-pra4[,c("Subscriber.ID", "HIE.ID")]
 praCAP<-reshape::rename(praCAP, c(Subscriber.ID="SUBSCRIBER_ID"))
 praCAP<-reshape::rename(praCAP, c(HIE.ID="Patient ID HIE"))
 
+#Remove "U" from string to match TrackVia Subscriber IDs
+praCAP$SUBSCRIBER_ID<-gsub("U", "", praCAP$SUBSCRIBER_ID)
+
 #Exports csv files
 #write.csv(praCAP, (file=paste ("PRA-Cap", ".csv", sep="")), row.names=FALSE)
 write.csv(praCAP, stdout(), row.names=FALSE)
