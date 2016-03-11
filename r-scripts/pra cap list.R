@@ -11,7 +11,7 @@ pra3<-subset(pra2,PRA.Creation.Date!="" )
 pra4<-subset(pra3,!grepl("NIC", pra3$Subscriber.ID))
 
 #Remove "U" from string to match TrackVia Subscriber IDs
-pra4$Subscriber.ID<-gsub("U", "", pra4P$Subscriber.ID)
+pra4$Subscriber.ID<-gsub("U", "", pra4$Subscriber.ID)
 
 #Identifies missing HIE Import Link values
 pra4<-subset(pra4, !(pra4$HIE.ID %in% caplist$Patient.ID.HIE))
