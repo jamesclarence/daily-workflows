@@ -126,6 +126,11 @@ acoUtilization$ID <- NULL
 acoUtilization$DischargeDate <- as.character(acoUtilization$DischargeDate)
 acoUtilization$DischargeDate[is.na(acoUtilization$DischargeDate)] <- ""
 
+# Removes duplicate entries
+acoUtilization$testid <- paste(acoUtilization$HIEID, acoUtilization$AdmitDate , acoUtilization$Facility, acoUtilization$PatientClass, sep="")
+acoUtilization <- acoUtilization[!duplicated(acoUtilization[,11]),]
+acoUtilization$testid <- NULL
+
 #Exports csv file
 #write.csv(acoUtilization, (file=paste("ACO-Utilizations", ".csv", sep="")), row.names=FALSE)
 write.csv(acoUtilization, stdout(), row.names=FALSE)
