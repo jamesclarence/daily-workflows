@@ -65,7 +65,8 @@ hieutils <- data.frame(aco2[,c(
   "Adm.Diagnoses",
   "Inp..6mo.",
   "ED..6mo.",
-  "CurrentlyAdmitted"
+  "CurrentlyAdmitted",
+  "Subscriber.ID"
 )])
 
 #Cleans date fields in the tvutils file by removing the time
@@ -130,6 +131,12 @@ acoUtilization$DischargeDate[is.na(acoUtilization$DischargeDate)] <- ""
 acoUtilization$testid <- paste(acoUtilization$HIEID, acoUtilization$AdmitDate , acoUtilization$Facility, acoUtilization$PatientClass, sep="")
 acoUtilization <- acoUtilization[!duplicated(acoUtilization[,11]),]
 acoUtilization$testid <- NULL
+
+#Subsets records that have a corresponding SUBSCRIBER_ID in TrackVia
+acoUtilization<-subset(acoUtilization, (acoUtilization$Subscriber.ID %in% caplist$SUBSCRIBER_ID))
+
+#Drops unused column
+acoUtilization$Subscriber.ID <- NULL
 
 #Exports csv file
 #write.csv(acoUtilization, (file=paste("ACO-Utilizations", ".csv", sep="")), row.names=FALSE)
