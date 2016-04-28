@@ -62,6 +62,9 @@ acoCAP<-data.frame(aco2[,c("Subscriber.ID","Patient.ID")])
 acoCAP<-reshape::rename(acoCAP, c(Subscriber.ID  ="SUBSCRIBER_ID"))
 acoCAP<-reshape::rename(acoCAP, c(Patient.ID="Patient ID HIE"))
 
+#Subsets records that have a corresponding SUBSCRIBER_ID in TrackVia
+acoCAP<-subset(acoCAP, (acoCAP$SUBSCRIBER_ID %in% caplist$SUBSCRIBER_ID))
+
 #Exports csv file
 #write.csv(acoCAP, (file=paste ("ACO-Cap", ".csv", sep="")), row.names=FALSE)
 write.csv(acoCAP, stdout(), row.names=FALSE)
