@@ -16,6 +16,7 @@ phope   <-read.csv(paste("tmp/project-hope", ".csv", sep=""),stringsAsFactors=FA
 reliance<-read.csv(paste("tmp/reliance", ".csv", sep=""),stringsAsFactors=FALSE)
 luke    <-read.csv(paste("tmp/st-luke", ".csv", sep=""),stringsAsFactors=FALSE)
 uhi     <-read.csv(paste("tmp/uhi", ".csv", sep=""),stringsAsFactors=FALSE)
+caplist <-read.csv(paste("tmp/caplist",  ".csv", sep=""), stringsAsFactors=FALSE)
 tvutils <-read.csv(paste("tmp/tvutils", ".csv", sep=""),stringsAsFactors=FALSE)
 
 # Rename fields in UHI file
