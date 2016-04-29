@@ -16,14 +16,14 @@ var queue = require('queue-async'),
     emailConfig = {
       to: process.env.EMAIL_TO,
       from: process.env.EMAIL_FROM,
-      host: 'smtp.mandrillapp.com',
+      host: process.env.EMAIL_HOST,
       username: process.env.EMAIL_USER,
       password: process.env.EMAIL_PASSWORD,
       subject: '[CCHP Automation] Files Updated',
       message: "<p>The automation script just finished. Here's the log:</p><p>------</p>"
     },
     mailer = nodemailer.createTransport({
-      service: 'Mandrill',
+      service: process.env.EMAIL_SERVICE,
       auth: {
         user: emailConfig.username,
         pass: emailConfig.password
