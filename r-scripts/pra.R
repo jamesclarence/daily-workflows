@@ -13,6 +13,10 @@ pra4<-subset(pra3,!grepl("NIC", pra3$Subscriber.ID))
 #Remove "U" from string to match TrackVia Subscriber IDs
 pra4$Subscriber.ID<-gsub("U", "", pra4$Subscriber.ID)
 
+#Removes commas from values in the facility field
+pra4$PRA.Facility.Created[pra4$PRA.Facility.Created == "Shlomo Stemmer, M.D."] <- "Shlomo Stemmer"
+pra4$PRA.Facility.Updated[pra4$PRA.Facility.Updated == "Shlomo Stemmer, M.D."] <- "Shlomo Stemmer"
+
 #Keeps only those that have a corresponding Subscriber ID
 pra4<-subset(pra4, (pra4$Subscriber.ID %in% caplist$SUBSCRIBER_ID))
 
