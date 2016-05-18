@@ -2,7 +2,7 @@
 suppressMessages(require(reshape))
 
 #Sets working directory, reads file and creates a nickname#
-CMITriage <- read.csv("tmp/Admitted Past Month (High Use).csv", header=TRUE)
+CMITriage <- read.csv("tmp/Admitted Past Month (High Use).csv", header=TRUE,  stringsAsFactors = FALSE)
 
 #Splits the "Name" column into First and Last Name#
 CMITriage$LastName = as.character(lapply(strsplit(as.character(CMITriage$Name), split=", "), "[", 1))
@@ -16,8 +16,9 @@ CMITriage$FN<-substr(CMITriage$FirstName, 1, 2)
 CMITriage$LN<-substr(CMITriage$LastName, 1, 3)
 
 #Prepares the DOB Field to be concatenated for the PatientID2 field#
-CMITriage$DOB2 <- as.POSIXct(CMITriage$DOB, format="%m/%d/%Y")
-CMITriage$DOB3<-format(CMITriage$DOB2, "%m%d%Y")
+CMITriage[ CMITriage == "08/08/1888" ] = ""
+CMITriage$DOB  <- as.Date(CMITriage$DOB, format="%m/%d/%Y")
+CMITriage$DOB3 <- format(CMITriage$DOB, "%m%d%Y")
 
 #Concatenates the 3 fields that form the PatientID field#
 CMITriage$PatientID2 <- do.call(paste, c(CMITriage[c("FN", "LN", "DOB3")], sep = ""))
@@ -25,7 +26,6 @@ CMITriage$PatientID2 <- do.call(paste, c(CMITriage[c("FN", "LN", "DOB3")], sep =
 #Drop the extra fields#
 CMITriage$FN<- NULL
 CMITriage$LN<- NULL
-CMITriage$DOB2 <-NULL
 CMITriage$DOB3 <-NULL
 
 #Keeps only Cooper and Lourdes#
