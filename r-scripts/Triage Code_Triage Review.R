@@ -16,10 +16,9 @@ CMITriage$FN<-substr(CMITriage$FirstName, 1, 2)
 CMITriage$LN<-substr(CMITriage$LastName, 1, 3)
 
 #Prepares the DOB Field to be concatenated for the PatientID2 field#
-CMITriage[ CMITriage == "08/08/1888" ] = ""
+CMITriage$DOB[ CMITriage$DOB == "08/08/1888" ] = "01/01/1900"
 CMITriage$DOB  <- as.Date(CMITriage$DOB, format="%m/%d/%Y")
 CMITriage$DOB3 <- format(CMITriage$DOB, "%m%d%Y")
-CMITriage$DOB3 <- ifelse(is.na(CMITriage$DOB), "00000000", CMITriage$DOB3)
 
 #Concatenates the 3 fields that form the PatientID field#
 CMITriage$PatientID2 <- do.call(paste, c(CMITriage[c("FN", "LN", "DOB3")], sep = ""))
