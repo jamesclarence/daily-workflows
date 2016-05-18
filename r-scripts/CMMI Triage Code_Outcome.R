@@ -2,7 +2,7 @@
 suppressMessages(require(reshape))
 
 #Sets working directory, reads file and creates a nickname#
-CMITriage <- read.csv("tmp/Admitted Past Month (High Use).csv", header=TRUE)
+CMITriage <- read.csv("tmp/Admitted Past Month (High Use).csv", header=TRUE,  stringsAsFactors = FALSE)
 
 #Splits the "Name" column into First and Last Name#
 CMITriage$LastName = as.character(lapply(strsplit(as.character(CMITriage$Name), split=", "), "[", 1))
@@ -16,9 +16,9 @@ CMITriage$FN<-substr(CMITriage$FirstName, 1, 2)
 CMITriage$LN<-substr(CMITriage$LastName, 1, 3)
 
 #Prepares the DOB Field to be concatenated for the PatientID2 field#
-CMITriage$DOB2 <- as.POSIXct(CMITriage$DOB, format="%m/%d/%Y")
-#CMITriage$DOB2<-as.numeric(CMITriage$DOB2)
-CMITriage$DOB3<-format(CMITriage$DOB2, "%m%d%Y")
+CMITriage[ CMITriage == "08/08/1888" ] = ""
+CMITriage$DOB  <- as.Date(CMITriage$DOB, format="%m/%d/%Y")
+CMITriage$DOB3 <- format(CMITriage$DOB, "%m%d%Y")
 
 #Concatenates the 3 fields that form the PatientID field#
 CMITriage$PatientID2 <- do.call(paste, c(CMITriage[c("FN", "LN", "DOB3")], sep = ""))
@@ -26,7 +26,6 @@ CMITriage$PatientID2 <- do.call(paste, c(CMITriage[c("FN", "LN", "DOB3")], sep =
 #Drop the extra fields#
 CMITriage$FN<- NULL
 CMITriage$LN<- NULL
-CMITriage$DOB2 <-NULL
 CMITriage$DOB3 <-NULL
 
 #Keeps only Cooper and Lourdes#
@@ -62,9 +61,8 @@ CMITriage3$Age<-NULL
 CMITriage3$Facility<-NULL
 CMITriage3$Gender<-NULL
 
-#Formats DOB field in prep for export
-CMITriage3$DOB <- as.POSIXct(CMITriage3$DOB, format="%m/%d/%Y")
-CMITriage3$DOB <- format(CMITriage3$DOB, "%Y-%m-%d")
+#Sets DOB as character
+CMITriage3$DOB <- as.character(CMITriage3$DOB)
 
 #Renames columns#
 CMITriage3<-reshape::rename(CMITriage3, c(Patient.ID="HIEID"))
@@ -87,6 +85,9 @@ TriageOutcome<-CMITriage3[,c("Last Name", "First Name", "Date of Birth", "Patien
 
 #If there are genders other than F or M, it leaves it blank
 TriageOutcome$Gender[is.na(TriageOutcome$Gender)==TRUE] <- ""
+
+#If there are NA's, replaces with blanks
+TriageOutcome[is.na(TriageOutcome)] <- ""
 
 #Exports file
 # write.csv(TriageOutcome, (file=paste("TriageOutcome", format(Sys.Date(), "-%Y-%m-%d"), ".csv", sep="")), row.names=FALSE)
