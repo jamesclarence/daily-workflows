@@ -10,7 +10,7 @@ Fam     <-read.csv(paste("tmp/cooper-family-med", ".csv", sep=""),stringsAsFacto
 Phys    <-read.csv(paste("tmp/cooper-physicians", ".csv", sep=""),stringsAsFactors=FALSE)
 fairview<-read.csv(paste("tmp/fairview", ".csv", sep=""),stringsAsFactors=FALSE)
 kylewill<-read.csv(paste("tmp/kyle-will", ".csv", sep=""),stringsAsFactors=FALSE)
-Lourdes <-read.csv(paste("tmp/lourdes", ".csv", sep="", stringsAsFactors=FALSE)
+Lourdes <-read.csv(paste("tmp/lourdes", ".csv", sep=""), stringsAsFactors=FALSE)
 phope   <-read.csv(paste("tmp/project-hope", ".csv", sep=""),stringsAsFactors=FALSE)
 reliance<-read.csv(paste("tmp/reliance", ".csv", sep=""),stringsAsFactors=FALSE)
 luke    <-read.csv(paste("tmp/st-luke", ".csv", sep=""),stringsAsFactors=FALSE)
