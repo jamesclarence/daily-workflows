@@ -13,13 +13,17 @@ pra4<-subset(pra3,!grepl("NIC", pra3$Subscriber.ID))
 #Remove "U" from string to match TrackVia Subscriber IDs
 pra4$Subscriber.ID<-gsub("U", "", pra4$Subscriber.ID)
 
+#Corrects historical case error in facilities
+pra4$PRA.Facility.Created[pra4$PRA.Facility.Created == "CAMCare Gateway"] <- "Camcare Gateway"
+pra4$PRA.Facility.Updated[pra4$PRA.Facility.Updated == "CAMCare Gateway"] <- "Camcare Gateway"
+
 #Removes commas from values in the facility field
 pra4$PRA.Facility.Created[pra4$PRA.Facility.Created == "Shlomo Stemmer, M.D."] <- "Shlomo Stemmer"
 pra4$PRA.Facility.Updated[pra4$PRA.Facility.Updated == "Shlomo Stemmer, M.D."] <- "Shlomo Stemmer"
 
-#Corrects historical case error in facilities
-pra4$PRA.Facility.Created[pra4$PRA.Facility.Created == "CAMCare Gateway"] <- "Camcare Gateway"
-pra4$PRA.Facility.Updated[pra4$PRA.Facility.Updated == "CAMCare Gateway"] <- "Camcare Gateway"
+#Removes commas from values in the facility field
+pra4$PRA.Facility.Created[pra4$PRA.Facility.Created == "Southern Jersey Family Medical Centers, Inc. - Burlington"] <- "Southern Jersey Family Medical Centers Burlington"
+pra4$PRA.Facility.Updated[pra4$PRA.Facility.Updated == "Southern Jersey Family Medical Centers, Inc. - Burlington"] <- "Southern Jersey Family Medical Centers Burlington"
 
 #Keeps only those that have a corresponding Subscriber ID
 pra4<-subset(pra4, (pra4$Subscriber.ID %in% caplist$SUBSCRIBER_ID))
