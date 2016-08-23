@@ -25,6 +25,10 @@ pra4$PRA.Facility.Updated[pra4$PRA.Facility.Updated == "Shlomo Stemmer, M.D."] <
 pra4$PRA.Facility.Created[pra4$PRA.Facility.Created == "Southern Jersey Family Medical Centers, Inc. - Burlington"] <- "Southern Jersey Family Medical Centers Burlington"
 pra4$PRA.Facility.Updated[pra4$PRA.Facility.Updated == "Southern Jersey Family Medical Centers, Inc. - Burlington"] <- "Southern Jersey Family Medical Centers Burlington"
 
+# Removes backslash from values in the facility field
+pra4$PRA.Facility.Created[pra4$PRA.Facility.Created == "Kennedy OB/GYN Associates - Somerdale"] <- "Kennedy OB GYN Associates - Somerdale"
+pra4$PRA.Facility.Updated[pra4$PRA.Facility.Updated == "Kennedy OB/GYN Associates - Somerdale"] <- "Kennedy OB GYN Associates - Somerdale"
+
 #Keeps only those that have a corresponding Subscriber ID
 pra4<-subset(pra4, (pra4$Subscriber.ID %in% caplist$SUBSCRIBER_ID))
 
