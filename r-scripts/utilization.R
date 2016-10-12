@@ -71,9 +71,14 @@ hieutils <- data.frame(aco2[,c(
 )])
 
 #Cleans date fields in the tvutils file by removing the time
-tvutils$AdmitDate<-gsub("T12:00:00-0700", "",tvutils$AdmitDate)
-tvutils$DischargeDate<-gsub("T12:00:00-0700", "",tvutils$DischargeDate)
-tvutils$DischargeDate<-gsub("-0001-11-30T00:00:00-0700", "" ,tvutils$DischargeDate)
+tvutils<-cSplit(tvutils, 1:2, sep="T", stripWhite=TRUE, type.convert=FALSE)
+tvutils$AdmitDate_2 <- NULL
+tvutils$DischargeDate_2 <- NULL
+tvutils$DischargeDate_1<-gsub("-0001-11-30", "" ,tvutils$DischargeDate_1)
+
+#Renames date fields
+tvutils <- reshape::rename(tvutils, c(AdmitDate_1="AdmitDate"))
+tvutils <- reshape::rename(tvutils, c(DischargeDate_1="DischargeDate"))
 
 #Replaces blanks with NAs in the tvutils DischargeDate field
 tvutils$DischargeDate[tvutils$DischargeDate==""]  <- NA 
