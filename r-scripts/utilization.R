@@ -2,7 +2,6 @@
 suppressWarnings(suppressMessages(require(reshape)))
 suppressWarnings(suppressMessages(require(dplyr)))
 
-#Reads in files
 # Reads in files
 AR      <-read.csv(paste("tmp/acosta-ramon", ".csv", sep=""),stringsAsFactors=FALSE)
 cam     <-read.csv(paste("tmp/camcare", ".csv", sep=""),stringsAsFactors=FALSE)
@@ -16,13 +15,27 @@ phope   <-read.csv(paste("tmp/project-hope", ".csv", sep=""),stringsAsFactors=FA
 reliance<-read.csv(paste("tmp/reliance", ".csv", sep=""),stringsAsFactors=FALSE)
 luke    <-read.csv(paste("tmp/st-luke", ".csv", sep=""),stringsAsFactors=FALSE)
 uhi     <-read.csv(paste("tmp/uhi", ".csv", sep=""),stringsAsFactors=FALSE)
-caplist <-read.csv(paste("tmp/caplist",  ".csv", sep=""), stringsAsFactors=FALSE)
-tvutils <-read.csv(paste("tmp/tvutils", ".csv", sep=""),stringsAsFactors=FALSE)
+#caplist <-read.csv(paste("tmp/caplist",  ".csv", sep=""), stringsAsFactors=FALSE)
+#tvutils <-read.csv(paste("tmp/tvutils", ".csv", sep=""),stringsAsFactors=FALSE)
+
+# Adds source column
+AR       	$Report	<-	"Acosta Ramon"
+cam     	$Report	<-	"CAMcare"
+Amb     	$Report	<-	"Cooper Ambulatory"
+Fam     	$Report	<-	"Cooper Family"
+Phys    	$Report	<-	"Cooper Physicians"
+uhi     	$Report	<-	"Cooper UHI"
+fairview	$Report	<-	"Fairview"
+kylewill	$Report	<-	"Kyle Will"
+Lourdes 	$Report	<-	"Lourdes"
+phope   	$Report	<-	"Project Hope"
+reliance	$Report	<-	"Reliance"
+luke    	$Report	<-	"St Lukes"
 
 # Rename fields in UHI file
 uhi <- reshape::rename(uhi, c(Last.Provider="Provider"))
 
-# Deletes unused fields
+# Adds extra fields with blank values to match column count
 uhi$PCP.Name <- ""
 uhi$Practice <- ""
 uhi$Source <- ""
@@ -34,7 +47,7 @@ uhi$Subscriber.ID <- ifelse(grepl("NIC", uhi$Subscriber.ID), uhi$Subscriber.ID, 
 cam<-subset(cam, Source=="Horizon")
 
 # Appends all files
-aco <- rbind(Amb,AR,cam,fairview,Fam,kylewill,Lourdes,luke,phope,Phys,reliance)
+aco <- rbind(AR,cam,Amb,Fam,Phys,uhi,fairview,kylewill,Lourdes,phope,reliance,luke)
 
 # Sorts columns alphabetically
 aco <- aco[,order(names(aco))]
@@ -57,6 +70,7 @@ aco2$CurrentlyAdmitted <- ifelse(aco2$CurrentlyAdmitted == aco2$DischargeDate, "
 
 # Identifies the columns for the two lists to be exported
 hieutils <- data.frame(aco2[,c(
+  "Name",
   "Patient.ID",
   "Admit.Date",
   "Facility",
@@ -67,43 +81,37 @@ hieutils <- data.frame(aco2[,c(
   "Inp..6mo.",
   "ED..6mo.",
   "CurrentlyAdmitted",
-  "Subscriber.ID"
+  "Subscriber.ID",
+  "Report"
 )])
 
 #Cleans date fields in the tvutils file by removing the time
-tvutils<-cSplit(tvutils, 1:2, sep="T", stripWhite=TRUE, type.convert=FALSE)
-tvutils$AdmitDate_2 <- NULL
-tvutils$DischargeDate_2 <- NULL
-tvutils$DischargeDate_1<-gsub("-0001-11-30", "" ,tvutils$DischargeDate_1)
+#tvutils<-cSplit(tvutils, 1:2, sep="T", stripWhite=TRUE, type.convert=FALSE)
+#tvutils$AdmitDate_2 <- NULL
+#tvutils$DischargeDate_2 <- NULL
+#tvutils$DischargeDate_1<-gsub("-0001-11-30", "" ,tvutils$DischargeDate_1)
 
 #Renames date fields
-tvutils <- reshape::rename(tvutils, c(AdmitDate_1="AdmitDate"))
-tvutils <- reshape::rename(tvutils, c(DischargeDate_1="DischargeDate"))
+#tvutils <- reshape::rename(tvutils, c(AdmitDate_1="AdmitDate"))
+#tvutils <- reshape::rename(tvutils, c(DischargeDate_1="DischargeDate"))
 
 #Replaces blanks with NAs in the tvutils DischargeDate field
-tvutils$DischargeDate[tvutils$DischargeDate==""]  <- NA 
+#tvutils$DischargeDate[tvutils$DischargeDate==""]  <- NA 
 
 #Replaces blanks with NA values in the hieutils DischargeDate field
 hieutils$DischargeDate[hieutils$DischargeDate==""]  <- NA 
 
 # Create ID field for utilizations in the import file
-hieutils$ID <- paste(
-  hieutils$Patient.ID, 
-  hieutils$Admit.Date, 
-  hieutils$Facility, 
-  hieutils$Patient.Class, 
-  hieutils$DischargeDate, sep="-")
+#hieutils$ID <- paste(hieutils$Patient.ID,hieutils$Admit.Date,hieutils$Facility,hieutils$Patient.Class,hieutils$DischargeDate, sep="-")
 
 # Create ID field for utilizations in the trackvia file
-tvutils$ID <- paste(
-  tvutils$HIEID, 
-  tvutils$AdmitDate, 
-  tvutils$Facility, 
-  tvutils$PatientClass, 
-  tvutils$DischargeDate, sep="-")
+#tvutils$ID <- paste(tvutils$HIEID,tvutils$AdmitDate,tvutils$Facility,tvutils$PatientClass,tvutils$DischargeDate, sep="-")
 
-# Subset records that are not in the acoutil file
-acoUtilization <- hieutils[!hieutils$ID %in% tvutils$ID,]
+# Subset records that are not already in TrackVia
+#acoUtilization <- hieutils[!hieutils$ID %in% tvutils$ID,]
+
+# Step to circumvent the commented out lines
+acoUtilization <- hieutils
 
 # Renames fields to import
 acoUtilization <- reshape::rename(acoUtilization, c(Patient.ID="HIEID"))
@@ -134,15 +142,13 @@ acoUtilization$DischargeDate <- as.character(acoUtilization$DischargeDate)
 acoUtilization$DischargeDate[is.na(acoUtilization$DischargeDate)] <- ""
 
 # Removes duplicate entries
-acoUtilization$testid <- paste(acoUtilization$HIEID, acoUtilization$AdmitDate , acoUtilization$Facility, acoUtilization$PatientClass, sep="")
-acoUtilization <- acoUtilization[!duplicated(acoUtilization[,11]),]
-acoUtilization$testid <- NULL
+acoUtilization<-unique(acoUtilization)
 
-#Subsets records that have a corresponding SUBSCRIBER_ID in TrackVia
-acoUtilization<-subset(acoUtilization, (acoUtilization$Subscriber.ID %in% caplist$SUBSCRIBER_ID))
+# Subsets records that have a corresponding SUBSCRIBER_ID in TrackVia
+#acoUtilization<-subset(acoUtilization, (acoUtilization$Subscriber.ID %in% caplist$SUBSCRIBER_ID))
 
-#Drops unused column
-acoUtilization$Subscriber.ID <- NULL
+# Drops unused column
+#acoUtilization$Subscriber.ID <- NULL
 
 #Exports csv file
 #write.csv(acoUtilization, (file=paste("ACO-Utilizations", ".csv", sep="")), row.names=FALSE)
