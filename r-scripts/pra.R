@@ -13,6 +13,12 @@ pra4<-subset(pra3,!grepl("NIC", pra3$Subscriber.ID))
 #Remove "U" from string to match TrackVia Subscriber IDs
 pra4$Subscriber.ID<-gsub("U", "", pra4$Subscriber.ID)
 
+#Standardizes the different versions of CAMcare
+pra4$PRA.Facility.Created[pra4$PRA.Facility.Created == "Camcare Gateway"] <- "CAMcare Gateway"
+pra4$PRA.Facility.Updated[pra4$PRA.Facility.Updated == "Camcare Gateway"] <- "CAMcare Gateway"
+pra4$PRA.Facility.Created[pra4$PRA.Facility.Created == "CAMCare Gateway"] <- "CAMcare Gateway"
+pra4$PRA.Facility.Updated[pra4$PRA.Facility.Updated == "CAMCare Gateway"] <- "CAMcare Gateway"
+
 #Removes commas from values in the facility field
 pra4$PRA.Facility.Created[pra4$PRA.Facility.Created == "Shlomo Stemmer, M.D."] <- "Shlomo Stemmer"
 pra4$PRA.Facility.Updated[pra4$PRA.Facility.Updated == "Shlomo Stemmer, M.D."] <- "Shlomo Stemmer"
