@@ -13,10 +13,6 @@ pra4<-subset(pra3,!grepl("NIC", pra3$Subscriber.ID))
 #Remove "U" from string to match TrackVia Subscriber IDs
 pra4$Subscriber.ID<-gsub("U", "", pra4$Subscriber.ID)
 
-#Corrects historical case error in facilities
-pra4$PRA.Facility.Created[pra4$PRA.Facility.Created == "CAMCare Gateway"] <- "Camcare Gateway"
-pra4$PRA.Facility.Updated[pra4$PRA.Facility.Updated == "CAMCare Gateway"] <- "Camcare Gateway"
-
 #Removes commas from values in the facility field
 pra4$PRA.Facility.Created[pra4$PRA.Facility.Created == "Shlomo Stemmer, M.D."] <- "Shlomo Stemmer"
 pra4$PRA.Facility.Updated[pra4$PRA.Facility.Updated == "Shlomo Stemmer, M.D."] <- "Shlomo Stemmer"
@@ -34,6 +30,9 @@ pra4$PRA.Facility.Created[pra4$PRA.Facility.Created == "Kennedy Health Alliance 
 pra4$PRA.Facility.Updated[pra4$PRA.Facility.Updated == "Kennedy Health Alliance OB/GYN"] <- "Kennedy Health Alliance OB GYN"
 pra4$PRA.Facility.Created[pra4$PRA.Facility.Created == "Rowan University OB/GYN - Sewell"] <- "Rowan University OB GYN - Sewell"
 pra4$PRA.Facility.Updated[pra4$PRA.Facility.Updated == "Rowan University OB/GYN - Sewell"] <- "Rowan University OB GYN - Sewell"
+pra4$PRA.Facility.Created[pra4$PRA.Facility.Created == "Cooper OB/GYN - Marlton"] <- "Cooper OB GYN - Marlton"
+pra4$PRA.Facility.Updated[pra4$PRA.Facility.Updated == "Cooper OB/GYN - Marlton"] <- "Cooper OB GYN - Marlton"
+
 
 # Removes aposthrophes from values in the facility field
 pra4$PRA.Facility.Created[pra4$PRA.Facility.Created == "Jaffe Family Women's Care Center - Camden"] <- "Jaffe Family Womens Care Center - Camden"
