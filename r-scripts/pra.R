@@ -20,8 +20,8 @@ pra4$PRA.Facility.Updated[pra4$PRA.Facility.Updated == "CAMCare Gateway"] <- "Ca
 #Removes commas from values in the facility field
 pra4$PRA.Facility.Created[pra4$PRA.Facility.Created == "Shlomo Stemmer, M.D."] <- "Shlomo Stemmer"
 pra4$PRA.Facility.Updated[pra4$PRA.Facility.Updated == "Shlomo Stemmer, M.D."] <- "Shlomo Stemmer"
-pra4$PRA.Facility.Created[pra4$PRA.Facility.Created == "Prasanta C. Chandra, M.D."] <- "Prasanta C. Chandra M.D."
-pra4$PRA.Facility.Updated[pra4$PRA.Facility.Updated == "Prasanta C. Chandra, M.D."] <- "Prasanta C. Chandra M.D."
+pra4$PRA.Facility.Created[pra4$PRA.Facility.Created == "Prasanta C. Chandra, M.D."] <- "Prasanta C Chandra MD"
+pra4$PRA.Facility.Updated[pra4$PRA.Facility.Updated == "Prasanta C. Chandra, M.D."] <- "Prasanta C Chandra MD"
 
 #Removes commas from values in the facility field
 pra4$PRA.Facility.Created[pra4$PRA.Facility.Created == "Southern Jersey Family Medical Centers, Inc. - Burlington"] <- "Southern Jersey Family Medical Centers Burlington"
