@@ -32,6 +32,8 @@ pra4$PRA.Facility.Created[pra4$PRA.Facility.Created == "Kennedy OB/GYN Associate
 pra4$PRA.Facility.Updated[pra4$PRA.Facility.Updated == "Kennedy OB/GYN Associates - Somerdale"] <- "Kennedy OB GYN Associates - Somerdale"
 pra4$PRA.Facility.Created[pra4$PRA.Facility.Created == "Kennedy Health Alliance OB/GYN"] <- "Kennedy Health Alliance OB GYN"
 pra4$PRA.Facility.Updated[pra4$PRA.Facility.Updated == "Kennedy Health Alliance OB/GYN"] <- "Kennedy Health Alliance OB GYN"
+pra4$PRA.Facility.Created[pra4$PRA.Facility.Created == "Rowan University OB/GYN - Sewell"] <- "Rowan University OB GYN - Sewell"
+pra4$PRA.Facility.Updated[pra4$PRA.Facility.Updated == "Rowan University OB/GYN - Sewell"] <- "Rowan University OB GYN - Sewell"
 
 # Removes aposthrophes from values in the facility field
 pra4$PRA.Facility.Created[pra4$PRA.Facility.Created == "Jaffe Family Women's Care Center - Camden"] <- "Jaffe Family Womens Care Center - Camden"
