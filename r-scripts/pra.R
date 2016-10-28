@@ -20,6 +20,8 @@ pra4$PRA.Facility.Updated[pra4$PRA.Facility.Updated == "CAMCare Gateway"] <- "Ca
 #Removes commas from values in the facility field
 pra4$PRA.Facility.Created[pra4$PRA.Facility.Created == "Shlomo Stemmer, M.D."] <- "Shlomo Stemmer"
 pra4$PRA.Facility.Updated[pra4$PRA.Facility.Updated == "Shlomo Stemmer, M.D."] <- "Shlomo Stemmer"
+pra4$PRA.Facility.Created[pra4$PRA.Facility.Created == "Prasanta C. Chandra, M.D."] <- "Prasanta C. Chandra"
+pra4$PRA.Facility.Updated[pra4$PRA.Facility.Updated == "Prasanta C. Chandra, M.D."] <- "Prasanta C. Chandra"
 
 #Removes commas from values in the facility field
 pra4$PRA.Facility.Created[pra4$PRA.Facility.Created == "Southern Jersey Family Medical Centers, Inc. - Burlington"] <- "Southern Jersey Family Medical Centers Burlington"
@@ -28,6 +30,16 @@ pra4$PRA.Facility.Updated[pra4$PRA.Facility.Updated == "Southern Jersey Family M
 # Removes backslash from values in the facility field
 pra4$PRA.Facility.Created[pra4$PRA.Facility.Created == "Kennedy OB/GYN Associates - Somerdale"] <- "Kennedy OB GYN Associates - Somerdale"
 pra4$PRA.Facility.Updated[pra4$PRA.Facility.Updated == "Kennedy OB/GYN Associates - Somerdale"] <- "Kennedy OB GYN Associates - Somerdale"
+pra4$PRA.Facility.Created[pra4$PRA.Facility.Created == "Kennedy Health Alliance OB/GYN"] <- "Kennedy Health Alliance OB GYN"
+pra4$PRA.Facility.Updated[pra4$PRA.Facility.Updated == "Kennedy Health Alliance OB/GYN"] <- "Kennedy Health Alliance OB GYN"
+
+# Removes aposthrophes from values in the facility field
+pra4$PRA.Facility.Created[pra4$PRA.Facility.Created == "Jaffe Family Women's Care Center - Camden"] <- "Jaffe Family Womens Care Center - Camden"
+pra4$PRA.Facility.Updated[pra4$PRA.Facility.Updated == "Jaffe Family Women's Care Center - Camden"] <- "Jaffe Family Womens Care Center - Camden"
+pra4$PRA.Facility.Created[pra4$PRA.Facility.Created == "Lourdes Medical Associates Women's Healthcare of Collingswood"] <- "Lourdes Medical Associates Womens Healthcare of Collingswood"
+pra4$PRA.Facility.Updated[pra4$PRA.Facility.Updated == "Lourdes Medical Associates Women's Healthcare of Collingswood"] <- "Lourdes Medical Associates Womens Healthcare of Collingswood"
+pra4$PRA.Facility.Created[pra4$PRA.Facility.Created == "Women's Health Associates - Turnersville"] <- "Womens Health Associates - Turnersville"
+pra4$PRA.Facility.Updated[pra4$PRA.Facility.Updated == "Women's Health Associates - Turnersville"] <- "Womens Health Associates - Turnersville"
 
 #Keeps only those that have a corresponding Subscriber ID
 pra4<-subset(pra4, (pra4$Subscriber.ID %in% caplist$SUBSCRIBER_ID))
