@@ -179,15 +179,4 @@
             "appName": "UHI Suboxone Clinic"
         }
     },
-    {
-        "sources": [
-            {
-                "type": "trackvia",
-                "view": "5000054391",
-                "name": "11.uhc.utilization.zach"
-            }
-        ],
-        "outputFile": "11.uhc.utilization.zach.csv",
-    }
-	
 ]
