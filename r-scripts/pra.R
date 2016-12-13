@@ -28,6 +28,8 @@ pra4$PRA.Facility.Updated[pra4$PRA.Facility.Updated == "Prasanta C. Chandra, M.D
 #Removes commas from values in the facility field
 pra4$PRA.Facility.Created[pra4$PRA.Facility.Created == "Southern Jersey Family Medical Centers, Inc. - Burlington"] <- "Southern Jersey Family Medical Centers Burlington"
 pra4$PRA.Facility.Updated[pra4$PRA.Facility.Updated == "Southern Jersey Family Medical Centers, Inc. - Burlington"] <- "Southern Jersey Family Medical Centers Burlington"
+pra4$PRA.Facility.Updated[pra4$PRA.Facility.Updated == "Martin E. Kanoff, DO, FACOOG"] <- "Martin E Kanoff DO"
+pra4$PRA.Facility.Created[pra4$PRA.Facility.Created == "Martin E. Kanoff, DO, FACOOG"] <- "Martin E Kanoff DO"
 
 # Removes backslash from values in the facility field
 pra4$PRA.Facility.Created[pra4$PRA.Facility.Created == "Kennedy OB/GYN Associates - Somerdale"] <- "Kennedy OB GYN Associates - Somerdale"
