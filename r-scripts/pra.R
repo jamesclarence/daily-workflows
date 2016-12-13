@@ -31,6 +31,7 @@ pra4$PRA.Facility.Updated[pra4$PRA.Facility.Updated == "Southern Jersey Family M
 pra4$PRA.Facility.Updated[pra4$PRA.Facility.Updated == "Martin E. Kanoff, DO, FACOOG"] <- "Martin E Kanoff DO"
 pra4$PRA.Facility.Created[pra4$PRA.Facility.Created == "Martin E. Kanoff, DO, FACOOG"] <- "Martin E Kanoff DO"
 
+
 # Removes backslash from values in the facility field
 pra4$PRA.Facility.Created[pra4$PRA.Facility.Created == "Kennedy OB/GYN Associates - Somerdale"] <- "Kennedy OB GYN Associates - Somerdale"
 pra4$PRA.Facility.Updated[pra4$PRA.Facility.Updated == "Kennedy OB/GYN Associates - Somerdale"] <- "Kennedy OB GYN Associates - Somerdale"
